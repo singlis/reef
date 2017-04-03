@@ -103,6 +103,12 @@ namespace Org.Apache.REEF.Examples.HelloREEF
             }
         }
 
+        public static void TestHello()
+        {
+            TangFactory.GetTang().NewInjector(GetRuntimeConfiguration(Local)).GetInstance<HelloREEF>().Run();
+        }
+
+
         public static void Main(string[] args)
         {
             TangFactory.GetTang().NewInjector(GetRuntimeConfiguration(args.Length > 0 ? args[0] : Local)).GetInstance<HelloREEF>().Run();
