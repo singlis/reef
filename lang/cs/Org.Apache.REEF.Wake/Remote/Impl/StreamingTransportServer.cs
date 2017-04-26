@@ -24,6 +24,9 @@ using Org.Apache.REEF.Utilities.AsyncUtils;
 using Org.Apache.REEF.Utilities.Diagnostics;
 using Org.Apache.REEF.Utilities.Logging;
 using Org.Apache.REEF.Wake.StreamingCodec;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleToAttribute("Org.Apache.REEF.Wake.Tests")]
 
 namespace Org.Apache.REEF.Wake.Remote.Impl
 {
