@@ -19,6 +19,9 @@ using System.IO;
 using Microsoft.Hadoop.Avro;
 using Newtonsoft.Json;
 using Org.Apache.REEF.Utilities;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleToAttribute("Org.Apache.REEF.Driver")]
 
 namespace Org.Apache.REEF.Common.Avro
 {

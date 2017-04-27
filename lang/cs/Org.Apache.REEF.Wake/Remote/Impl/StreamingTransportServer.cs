@@ -28,6 +28,7 @@ using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleToAttribute("Org.Apache.REEF.Wake.Tests")]
 
+
 namespace Org.Apache.REEF.Wake.Remote.Impl
 {
     /// <summary>

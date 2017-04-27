@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 <!--
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -31,7 +31,7 @@ under the License.
     <PackageReference Include="System.Reactive.Interfaces" Version="$(RxVersion)" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Caching" />
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml" />
   </ItemGroup>
