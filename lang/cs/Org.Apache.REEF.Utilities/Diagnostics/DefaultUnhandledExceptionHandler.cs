@@ -17,10 +17,8 @@
 
 using System;
 using System.IO;
-using System.Runtime.CompilerServices;
 using Org.Apache.REEF.Utilities.Logging;
 
-[assembly: InternalsVisibleToAttribute("Org.Apache.REEF.Common")]
 
 namespace Org.Apache.REEF.Utilities.Diagnostics
 {

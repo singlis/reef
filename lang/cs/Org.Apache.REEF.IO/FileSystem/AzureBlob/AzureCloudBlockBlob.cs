@@ -86,7 +86,7 @@ namespace Org.Apache.REEF.IO.FileSystem.AzureBlob
 
         public void UploadFromFile(string path, FileMode mode)
         {
-            _blob.UploadFromFile(path, mode);
+            _blob.UploadFromFile(path);
         }
 
         public void FetchAttributes()

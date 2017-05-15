@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 <!--
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -19,8 +19,12 @@ under the License.
     <AssemblyName>Org.Apache.REEF.Utilities</AssemblyName>
     <Description>Common utilities such as logging shared across Reef/Wake/Tang</Description>
     <PackageTags>Apache REEF Reef/Wake/Tang common utilities</PackageTags>
-    <TargetFrameworks>netstandard2.0;net46;net451</TargetFrameworks>
+    <TargetFrameworks>net46;net451</TargetFrameworks>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net451|x64'" />
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net451|x64'" />
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net46|x64'" />
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net46|x64'" />
   <Import Project="..\build.DotNet.props" />
   <ItemGroup>
       <PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJsonVersion)" />

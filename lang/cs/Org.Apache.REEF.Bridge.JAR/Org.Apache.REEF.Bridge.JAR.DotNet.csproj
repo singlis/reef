@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 <!--
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -18,18 +18,24 @@ specific language governing permissions and limitations
 under the License.
 -->
   <PropertyGroup>
-    <AssemblyName>Org.Apache.REEF.Examples</AssemblyName>
-    <Description>Reef Examples</Description>
-    <PackageTags>Reef Examples</PackageTags>
+    <AssemblyName>Org.Apache.REEF.Bridge.JAR</AssemblyName>
+    <Description>Bridge JAR for REEF.NET</Description>
+    <PackageTags>Reef Bridge</PackageTags>
     <TargetFrameworks>net46;net451</TargetFrameworks>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net46|x64'" />
   <Import Project="..\build.DotNet.props" />
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJsonVersion)" />
     <PackageReference Include="Microsoft.Hadoop.Avro" Version="$(AvroVersion)" />
+    <PackageReference Include="EnterpriseLibrary.TransientFaultHandling.Core" Version="$(TransientFaultHandlingVersion)" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>
   <ItemGroup>
@@ -39,5 +45,9 @@ under the License.
     <ProjectReference Include="..\Org.Apache.REEF.Driver\Org.Apache.Reef.Driver.DotNet.csproj" />
     <ProjectReference Include="..\Org.Apache.REEF.Network\Org.Apache.Reef.Network.DotNet.csproj" />
     <ProjectReference Include="..\Org.Apache.REEF.Wake\Org.Apache.Reef.Wake.DotNet.csproj" />
+    <ProjectReference Include="..\Org.Apache.REEF.Bridge\Org.Apache.Reef.Bridge.vcxproj" />
+    <ProjectReference Include="..\Org.Apache.REEF.Evaluator\Org.Apache.Reef.Evaluator.DotNet.csproj" />
+    <ProjectReference Include="..\Org.Apache.REEF.Examples\Org.Apache.Reef.Examples.DotNet.csproj" />
+    <ProjectReference Include="..\Org.Apache.REEF.IO\Org.Apache.Reef.IO.DotNet.csproj" />
   </ItemGroup>
 </Project>

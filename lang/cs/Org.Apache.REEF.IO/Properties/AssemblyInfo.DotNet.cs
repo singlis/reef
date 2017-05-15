@@ -15,21 +15,13 @@
 // specific language governing permissions and limitations
 // under the License.
 
-using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
-using Org.Apache.REEF.Tang.Annotations;
-using Org.Apache.REEF.Wake.Remote.Impl;
+using System.Runtime.CompilerServices;
 
-namespace Org.Apache.REEF.Wake.Remote
-{
-    /// <summary>
-    /// Interface for the retry logic to connect to remote endpoint
-    /// </summary>
-    [DefaultImplementation(typeof(RemoteConnectionRetryHandler))]
-    public interface IConnectionRetryHandler
-    {
-        /// <summary>
-        /// Retry policy for the tcp connection
-        /// </summary>
-        RetryPolicy Policy { get; }
-    }
-}
+// Allow the tests project access to `internal` APIs
+[assembly: InternalsVisibleTo("Org.Apache.REEF.IO.Tests")]
+[assembly: InternalsVisibleTo("Org.Apache.REEF.IO.TestClient")]
+[assembly: InternalsVisibleTo("Org.Apache.REEF.Client.Tests")]
+[assembly: InternalsVisibleTo("Org.Apache.REEF.Tests")]
+
+// Allow NSubstitute to create proxy implementations
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]

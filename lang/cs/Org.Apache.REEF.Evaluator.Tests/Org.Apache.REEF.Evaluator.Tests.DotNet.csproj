@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 <!--
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -16,27 +16,25 @@ specific language governing permissions and limitations
 under the License.
 -->
   <PropertyGroup>
-    <AssemblyName>Org.Apache.REEF.Wake</AssemblyName>
-    <Description>Wake is an event driven framework</Description>
-    <PackageTags>wake event driven</PackageTags>
+    <AssemblyName>Org.Apache.REEF.Evaluator.Tests</AssemblyName>
     <TargetFrameworks>net46;net451</TargetFrameworks>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net451|x64'" />
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net451|x64'" />
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net46|x64'" />
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net46|x64'" />
-
   <Import Project="..\build.DotNet.props" />
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml" />
+    <PackageReference Include="NSubstitute" Version="$(NSubstituteVersion)" />
     <PackageReference Include="protobuf-net" Version="$(ProtobufVersion)" />
-    <PackageReference Include="EnterpriseLibrary.TransientFaultHandling.Core" Version="$(TransientFaultHandlingVersion)" />
-    <PackageReference Include="System.Reactive.Interfaces" Version="$(RxVersion)" />
+    <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Org.Apache.REEF.Common\Org.Apache.Reef.Common.DotNet.csproj" />
+    <ProjectReference Include="..\Org.Apache.REEF.Examples\Org.Apache.Reef.Examples.DotNet.csproj" />
     <ProjectReference Include="..\Org.Apache.REEF.Tang\Org.Apache.Reef.Tang.DotNet.csproj" />
     <ProjectReference Include="..\Org.Apache.REEF.Utilities\Org.Apache.Reef.Utilities.DotNet.csproj" />
+    <ProjectReference Include="..\Org.Apache.REEF.Driver\Org.Apache.Reef.Driver.DotNet.csproj" />
+    <ProjectReference Include="..\Org.Apache.REEF.Examples.HelloREEF\Org.Apache.Reef.Examples.HelloREEF.DotNet.csproj" />
+    <ProjectReference Include="..\Org.Apache.REEF.Network\Org.Apache.Reef.Network.DotNet.csproj" />
+    <ProjectReference Include="..\Org.Apache.REEF.Wake\Org.Apache.Reef.Wake.DotNet.csproj" />
   </ItemGroup>
+  <Import Project="..\xunit.DotNet.targets" />
 </Project>
