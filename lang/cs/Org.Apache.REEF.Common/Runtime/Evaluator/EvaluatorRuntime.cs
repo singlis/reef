@@ -207,7 +207,7 @@ namespace Org.Apache.REEF.Common.Runtime.Evaluator
                     proc.WaitForExit();
                     Logger.Log(Level.Info, output);
 
-                    proc.StartInfo.Arguments = "advfirewall firewall add rule name=\"REEF-Evaluator-TCP-In\" dir=in action=allow protocol=TCP localport=all";
+                    proc.StartInfo.Arguments = "advfirewall firewall add rule name=\"REEF-Evaluator-TCP-In\" dir=in action=allow protocol=TCP localport=any";
                     proc.Start();
                     output = proc.StandardOutput.ReadToEnd();
                     proc.WaitForExit();
@@ -219,7 +219,7 @@ namespace Org.Apache.REEF.Common.Runtime.Evaluator
                     proc.WaitForExit();
                     Logger.Log(Level.Info, output);
 
-                    proc.StartInfo.Arguments = "advfirewall firewall add rule name=\"REEF-Evaluator-TCP-Out\" dir=out action=allow protocol=TCP localport=all";
+                    proc.StartInfo.Arguments = "advfirewall firewall add rule name=\"REEF-Evaluator-TCP-Out\" dir=out action=allow protocol=TCP localport=any";
                     proc.Start();
                     output = proc.StandardOutput.ReadToEnd();
                     proc.WaitForExit();

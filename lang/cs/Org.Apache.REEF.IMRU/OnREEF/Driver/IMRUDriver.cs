@@ -237,7 +237,7 @@ namespace Org.Apache.REEF.IMRU.OnREEF.Driver
             proc.WaitForExit();
             Logger.Log(Level.Info, output);
 
-            proc.StartInfo.Arguments = "advfirewall firewall add rule name=\"REEF-Driver-TCP-In\" dir=in action=allow protocol=TCP localport=all";
+            proc.StartInfo.Arguments = "advfirewall firewall add rule name=\"REEF-Driver-TCP-In\" dir=in action=allow protocol=TCP localport=any";
             proc.Start();
             output = proc.StandardOutput.ReadToEnd();
             proc.WaitForExit();
@@ -249,7 +249,7 @@ namespace Org.Apache.REEF.IMRU.OnREEF.Driver
             proc.WaitForExit();
             Logger.Log(Level.Info, output);
 
-            proc.StartInfo.Arguments = "advfirewall firewall add rule name=\"REEF-Driver-TCP-Out\" dir=out action=allow protocol=TCP localport=all";
+            proc.StartInfo.Arguments = "advfirewall firewall add rule name=\"REEF-Driver-TCP-Out\" dir=out action=allow protocol=TCP localport=any";
             proc.Start();
             output = proc.StandardOutput.ReadToEnd();
             proc.WaitForExit();
