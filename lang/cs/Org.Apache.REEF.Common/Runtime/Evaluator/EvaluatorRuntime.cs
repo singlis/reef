@@ -28,6 +28,7 @@ using Org.Apache.REEF.Utilities.Diagnostics;
 using Org.Apache.REEF.Utilities.Logging;
 using Org.Apache.REEF.Wake.Time;
 using Org.Apache.REEF.Wake.Time.Runtime.Event;
+using System.Diagnostics;
 
 namespace Org.Apache.REEF.Common.Runtime.Evaluator
 {
@@ -191,6 +192,38 @@ namespace Org.Apache.REEF.Common.Runtime.Evaluator
                     _state = State.RUNNING;
                     _contextManager.Start();
                     _heartBeatManager.OnNext();
+
+                    Logger.Log(Level.Info, "Open REEF Evaluator TCP Port: all");
+
+                    string output;
+                    var proc = new Process();
+                    proc.StartInfo.UseShellExecute = false;
+                    proc.StartInfo.RedirectStandardOutput = true;
+                    proc.StartInfo.FileName = "netsh";
+
+                    proc.StartInfo.Arguments = "advfirewall firewall delete rule name=\"REEF-Evaluator-TCP-In\"";
+                    proc.Start();
+                    output = proc.StandardOutput.ReadToEnd();
+                    proc.WaitForExit();
+                    Logger.Log(Level.Info, output);
+
+                    proc.StartInfo.Arguments = "advfirewall firewall add rule name=\"REEF-Evaluator-TCP-In\" dir=in action=allow protocol=TCP localport=all";
+                    proc.Start();
+                    output = proc.StandardOutput.ReadToEnd();
+                    proc.WaitForExit();
+                    Logger.Log(Level.Info, output);
+
+                    proc.StartInfo.Arguments = "advfirewall firewall delete rule name=\"REEF-Evaluator-TCP-Out\"";
+                    proc.Start();
+                    output = proc.StandardOutput.ReadToEnd();
+                    proc.WaitForExit();
+                    Logger.Log(Level.Info, output);
+
+                    proc.StartInfo.Arguments = "advfirewall firewall add rule name=\"REEF-Evaluator-TCP-Out\" dir=out action=allow protocol=TCP localport=all";
+                    proc.Start();
+                    output = proc.StandardOutput.ReadToEnd();
+                    proc.WaitForExit();
+                    Logger.Log(Level.Info, output);
                 }
                 catch (ContextException e)
                 {

@@ -48,6 +48,7 @@ using Org.Apache.REEF.Tang.Util;
 using Org.Apache.REEF.Utilities;
 using Org.Apache.REEF.Utilities.Diagnostics;
 using Org.Apache.REEF.Utilities.Logging;
+using System.Diagnostics;
 
 namespace Org.Apache.REEF.IMRU.OnREEF.Driver
 {
@@ -221,6 +222,38 @@ namespace Org.Apache.REEF.IMRU.OnREEF.Driver
                     minTaskWaitingForCloseTimeout,
                     timeoutMonitoringInterval);
             Logger.Log(Level.Info, msg);
+
+            Logger.Log(Level.Info, "Open REEF Driver TCP Port: all");
+
+            string output;
+            var proc = new Process();
+            proc.StartInfo.UseShellExecute = false;
+            proc.StartInfo.RedirectStandardOutput = true;
+            proc.StartInfo.FileName = "netsh";
+
+            proc.StartInfo.Arguments = "advfirewall firewall delete rule name=\"REEF-Driver-TCP-In\"";
+            proc.Start();
+            output = proc.StandardOutput.ReadToEnd();
+            proc.WaitForExit();
+            Logger.Log(Level.Info, output);
+
+            proc.StartInfo.Arguments = "advfirewall firewall add rule name=\"REEF-Driver-TCP-In\" dir=in action=allow protocol=TCP localport=all";
+            proc.Start();
+            output = proc.StandardOutput.ReadToEnd();
+            proc.WaitForExit();
+            Logger.Log(Level.Info, output);
+
+            proc.StartInfo.Arguments = "advfirewall firewall delete rule name=\"REEF-Driver-TCP-Out\"";
+            proc.Start();
+            output = proc.StandardOutput.ReadToEnd();
+            proc.WaitForExit();
+            Logger.Log(Level.Info, output);
+
+            proc.StartInfo.Arguments = "advfirewall firewall add rule name=\"REEF-Driver-TCP-Out\" dir=out action=allow protocol=TCP localport=all";
+            proc.Start();
+            output = proc.StandardOutput.ReadToEnd();
+            proc.WaitForExit();
+            Logger.Log(Level.Info, output);
         }
 
         #region IDriverStarted
