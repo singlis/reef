@@ -23,7 +23,7 @@ using Org.Apache.REEF.Utilities.Logging;
 namespace Org.Apache.REEF.Utilities.Diagnostics
 {
     [Private]
-    [Obsolete("TODO[JIRA REEF-1467] This class will be removed")]
+    //[Obsolete("TODO[JIRA REEF-1467] This class will be removed")]
     public static class Exceptions
     {
         #region methods
