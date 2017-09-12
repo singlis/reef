@@ -18,7 +18,6 @@ under the License.
   <PropertyGroup>
     <AssemblyName>Org.Apache.REEF.Network.Tests</AssemblyName>
     <TargetFrameworks>netcoreapp2.0;net46;net451</TargetFrameworks>
-    <DebugType Condition="'$(TargetFramework)' != '' AND !$(TargetFramework.StartsWith('netcoreapp'))">Full</DebugType>
   </PropertyGroup>
   <Import Project="..\build.DotNet.props" />
   <ItemGroup>

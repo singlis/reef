@@ -16,18 +16,14 @@ specific language governing permissions and limitations
 under the License.
 -->
   <PropertyGroup>
+      <!-- Required for NET.Test.Sdk to detect tests in .net451 framework -->
       <DebugType Condition="'$(TargetFramework)' != '' AND !$(TargetFramework.StartsWith('netcoreapp'))">Full</DebugType>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.0' Or '$(TargetFramework)' == 'net46'">
+  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0"/>
     <PackageReference Include="xunit" Version="2.2.0" NoWarn="NU1701"/>
     <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" NoWarn="NU1701"/>
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net451'">
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0"/>
-    <PackageReference Include="xunit" Version="2.1.0" NoWarn="NU1701"/>
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.1.0" NoWarn="NU1701"/>
   </ItemGroup>
 </Project>
 
