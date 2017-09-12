@@ -19,9 +19,8 @@ under the License.
     <AssemblyName>Org.Apache.REEF.Wake</AssemblyName>
     <Description>Wake is an event-driven framework</Description>
     <PackageTags>wake event-driven</PackageTags>
-    <TargetFrameworks>netstandard2.0;net46;net451</TargetFrameworks>
   </PropertyGroup>
-  <Import Project="..\build.DotNet.props" />
+  <Import Project="..\build.DotNetLibrary.props" />
   <ItemGroup>
     <PackageReference Include="protobuf-net" Version="$(ProtobufVersion)" />
     <PackageReference Include="EnterpriseLibrary.TransientFaultHandling.Core" Version="$(TransientFaultHandlingVersion)" NoWarn="NU1603" />

@@ -21,9 +21,8 @@ under the License.
     <AssemblyName>Org.Apache.REEF.Network</AssemblyName>
     <Description>Network services for REEF</Description>
     <PackageTags>REEF Network services</PackageTags>
-    <TargetFrameworks>netstandard2.0;net46;net451</TargetFrameworks>
   </PropertyGroup>
-  <Import Project="..\build.DotNet.props" />
+  <Import Project="..\build.DotNetLibrary.props" />
   <ItemGroup>
     <PackageReference Include="protobuf-net" Version="$(ProtobufVersion)" />
     <PackageReference Include="Microsoft.Avro.Core" Version="$(AvroVersion)" />
