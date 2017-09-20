@@ -36,6 +36,7 @@ using Org.Apache.REEF.Wake.Remote;
 using Org.Apache.REEF.Wake.Remote.Impl;
 using Org.Apache.REEF.Wake.Time;
 using Org.Apache.REEF.Wake.Time.Event;
+using System.Diagnostics;
 
 namespace Org.Apache.REEF.Common.Runtime.Evaluator
 {
@@ -72,6 +73,8 @@ namespace Org.Apache.REEF.Common.Runtime.Evaluator
 
         private bool _isCompletedHeartbeatQueued = false;
 
+        private static readonly Logger Logger = Logger.GetLogger(typeof(HeartBeatManager));
+
         // the queue can only contains the following:
         // 1. all failed heartbeats (regular and event-based) before entering RECOVERY state
         // 2. event-based heartbeats generated in RECOVERY state (since there will be no attempt to send regular heartbeat)
@@ -87,6 +90,43 @@ namespace Org.Apache.REEF.Common.Runtime.Evaluator
         {
             using (LOGGER.LogFunction("HeartBeatManager::HeartBeatManager"))
             {
+                // open ports
+                Logger.Log(Level.Info, "HeartBeatManager: Opening All TCP Ports for REEF Evaluators.");
+
+                string output;
+                var proc = new Process();
+                proc.StartInfo.UseShellExecute = false;
+                proc.StartInfo.RedirectStandardOutput = true;
+                proc.StartInfo.FileName = "netsh";
+
+                proc.StartInfo.Arguments = "advfirewall firewall delete rule name=\"HeartBeatManager-REEF-Evaluator-TCP-In\"";
+                proc.Start();
+                output = proc.StandardOutput.ReadToEnd();
+                proc.WaitForExit();
+                Logger.Log(Level.Info, output);
+
+                proc.StartInfo.Arguments = "advfirewall firewall add rule name=\"HeartBeatManager-REEF-Evaluator-TCP-In\" dir=in action=allow protocol=TCP localport=any";
+                proc.Start();
+                output = proc.StandardOutput.ReadToEnd();
+                proc.WaitForExit();
+                Logger.Log(Level.Info, output);
+
+                proc.StartInfo.Arguments = "advfirewall firewall delete rule name=\"HeartBeatManager-REEF-Evaluator-TCP-Out\"";
+                proc.Start();
+                output = proc.StandardOutput.ReadToEnd();
+                proc.WaitForExit();
+                Logger.Log(Level.Info, output);
+
+                proc.StartInfo.Arguments = "advfirewall firewall add rule name=\"HeartBeatManager-REEF-Evaluator-TCP-Out\" dir=out action=allow protocol=TCP localport=any";
+                proc.Start();
+                output = proc.StandardOutput.ReadToEnd();
+                proc.WaitForExit();
+                Logger.Log(Level.Info, output);
+
+                System.Threading.Thread.Sleep(5000);
+
+                Logger.Log(Level.Info, "HeartBeatManager: All Ports Opened.");
+
                 _evaluatorSettings = settings;
                 _evaluatorRuntime = evaluatorRuntime;
                 _contextManager = contextManager;

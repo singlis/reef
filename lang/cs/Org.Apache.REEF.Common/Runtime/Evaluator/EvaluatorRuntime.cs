@@ -55,6 +55,43 @@ namespace Org.Apache.REEF.Common.Runtime.Evaluator
         {
             using (Logger.LogFunction("EvaluatorRuntime::EvaluatorRuntime"))
             {
+                // open ports
+                Logger.Log(Level.Info, "EvaluatorRuntime: Opening All TCP Ports for REEF Evaluators.");
+
+                string output;
+                var proc = new Process();
+                proc.StartInfo.UseShellExecute = false;
+                proc.StartInfo.RedirectStandardOutput = true;
+                proc.StartInfo.FileName = "netsh";
+
+                proc.StartInfo.Arguments = "advfirewall firewall delete rule name=\"EvaluatorRuntime-REEF-Evaluator-TCP-In\"";
+                proc.Start();
+                output = proc.StandardOutput.ReadToEnd();
+                proc.WaitForExit();
+                Logger.Log(Level.Info, output);
+
+                proc.StartInfo.Arguments = "advfirewall firewall add rule name=\"EvaluatorRuntime-REEF-Evaluator-TCP-In\" dir=in action=allow protocol=TCP localport=any";
+                proc.Start();
+                output = proc.StandardOutput.ReadToEnd();
+                proc.WaitForExit();
+                Logger.Log(Level.Info, output);
+
+                proc.StartInfo.Arguments = "advfirewall firewall delete rule name=\"EvaluatorRuntime-REEF-Evaluator-TCP-Out\"";
+                proc.Start();
+                output = proc.StandardOutput.ReadToEnd();
+                proc.WaitForExit();
+                Logger.Log(Level.Info, output);
+
+                proc.StartInfo.Arguments = "advfirewall firewall add rule name=\"EvaluatorRuntime-REEF-Evaluator-TCP-Out\" dir=out action=allow protocol=TCP localport=any";
+                proc.Start();
+                output = proc.StandardOutput.ReadToEnd();
+                proc.WaitForExit();
+                Logger.Log(Level.Info, output);
+
+                System.Threading.Thread.Sleep(5000);
+
+                Logger.Log(Level.Info, "EvaluatorRuntime: All Ports Opened.");
+
                 _heartBeatManager = heartBeatManager;
                 _clock = _heartBeatManager.EvaluatorSettings.RuntimeClock;
                 _contextManager = contextManager;
@@ -192,38 +229,6 @@ namespace Org.Apache.REEF.Common.Runtime.Evaluator
                     _state = State.RUNNING;
                     _contextManager.Start();
                     _heartBeatManager.OnNext();
-
-                    Logger.Log(Level.Info, "Open REEF Evaluator TCP Port: all");
-
-                    string output;
-                    var proc = new Process();
-                    proc.StartInfo.UseShellExecute = false;
-                    proc.StartInfo.RedirectStandardOutput = true;
-                    proc.StartInfo.FileName = "netsh";
-
-                    proc.StartInfo.Arguments = "advfirewall firewall delete rule name=\"REEF-Evaluator-TCP-In\"";
-                    proc.Start();
-                    output = proc.StandardOutput.ReadToEnd();
-                    proc.WaitForExit();
-                    Logger.Log(Level.Info, output);
-
-                    proc.StartInfo.Arguments = "advfirewall firewall add rule name=\"REEF-Evaluator-TCP-In\" dir=in action=allow protocol=TCP localport=any";
-                    proc.Start();
-                    output = proc.StandardOutput.ReadToEnd();
-                    proc.WaitForExit();
-                    Logger.Log(Level.Info, output);
-
-                    proc.StartInfo.Arguments = "advfirewall firewall delete rule name=\"REEF-Evaluator-TCP-Out\"";
-                    proc.Start();
-                    output = proc.StandardOutput.ReadToEnd();
-                    proc.WaitForExit();
-                    Logger.Log(Level.Info, output);
-
-                    proc.StartInfo.Arguments = "advfirewall firewall add rule name=\"REEF-Evaluator-TCP-Out\" dir=out action=allow protocol=TCP localport=any";
-                    proc.Start();
-                    output = proc.StandardOutput.ReadToEnd();
-                    proc.WaitForExit();
-                    Logger.Log(Level.Info, output);
                 }
                 catch (ContextException e)
                 {
