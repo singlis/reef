@@ -20,7 +20,7 @@ under the License.
   <PropertyGroup>
     <AssemblyName>Org.Apache.REEF.IMRU.Tests</AssemblyName>
   </PropertyGroup>
-  <Import Project="..\build.DotNetTest.props" />
+  <Import Project="..\build.DotNetTest.targets" />
   <ItemGroup>
     <PackageReference Include="NSubstitute" Version="$(NSubstituteVersion)" />
   </ItemGroup>

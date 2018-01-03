@@ -66,6 +66,7 @@ under the License.
   </PropertyGroup>
 
   <!-- Package versions -->
+  <!--
   <PropertyGroup>
     <AvroVersion>1.5.6</AvroVersion>
     <NewtonsoftJsonVersion>10.0.3</NewtonsoftJsonVersion>
@@ -73,7 +74,9 @@ under the License.
     <SystemReactiveVersion>3.1.1</SystemReactiveVersion>
     <StyleCopVersion>4.7.49.1</StyleCopVersion>
     <NSubstituteVersion>1.8.2.0</NSubstituteVersion>
+    <XUnitVersion>2.2.0</XUnitVersion>
   </PropertyGroup>
+  -->
 
   <!-- Locations -->
   <PropertyGroup>

@@ -18,7 +18,7 @@ under the License.
   <PropertyGroup>
     <AssemblyName>Org.Apache.REEF.Wake.Tests</AssemblyName>
   </PropertyGroup>
-  <Import Project="..\build.DotNetTest.props" />
+  <Import Project="..\build.DotNetTest.targets" />
   <ItemGroup>
     <PackageReference Include="System.Reactive.Core" Version="$(SystemReactiveVersion)" />
     <PackageReference Include="System.Reactive.Interfaces" Version="$(SystemReactiveVersion)" />

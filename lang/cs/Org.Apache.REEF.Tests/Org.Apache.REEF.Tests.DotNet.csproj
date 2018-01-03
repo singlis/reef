@@ -23,7 +23,7 @@ under the License.
     </UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
   </PropertyGroup>
-  <Import Project="..\build.DotNetTest.props" />
+  <Import Project="..\build.DotNetTest.targets" />
   <ItemGroup>
     <PackageReference Include="Microsoft.Azure.KeyVault.Core" Version="2.0.4" />
     <PackageReference Include="Microsoft.Data.Edm" Version="5.8.2" />

@@ -17,7 +17,7 @@ under the License.
 -->
 <Project DefaultTargets="Test" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ProjectReferences Include="*\*.Tests.csproj" />
+    <ProjectReferences Include="*\*.Tests.DotNet.csproj" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(Configuration)' == '' ">
     <Configuration>Debug</Configuration>

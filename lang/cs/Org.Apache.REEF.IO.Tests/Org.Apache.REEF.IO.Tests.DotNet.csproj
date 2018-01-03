@@ -18,7 +18,7 @@ under the License.
   <PropertyGroup>
     <AssemblyName>Org.Apache.REEF.IO.Tests</AssemblyName>
   </PropertyGroup>
-  <Import Project="..\build.DotNetTest.props" />
+  <Import Project="..\build.DotNetTest.targets" />
   <ItemGroup>
     <PackageReference Include="NSubstitute" Version="$(NSubstituteVersion)" />
     <PackageReference Include="WindowsAzure.Storage" Version="$(WindowsAzureStorageVersion)" />

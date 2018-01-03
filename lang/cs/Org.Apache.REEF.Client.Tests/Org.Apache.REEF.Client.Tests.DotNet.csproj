@@ -22,7 +22,8 @@ under the License.
     <Description>REEF Client Tests</Description>
     <PackageTags>REEF Client</PackageTags>
   </PropertyGroup>
-  <Import Project="..\build.DotNetTest.props" />
+  <Import Project="..\build.DotNet.props" />
+  <Import Project="..\build.DotNetTest.targets" />
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJsonVersion)" />
     <PackageReference Include="NSubstitute" Version="$(NSubstituteVersion)" />
