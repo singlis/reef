@@ -16,13 +16,12 @@ specific language governing permissions and limitations
 under the License.
 -->
 
-<!-- <Import Project="build.DotNet.props"/> -->
 <PropertyGroup>
   <TargetFrameworks>net451</TargetFrameworks>
   <TargetFrameworks Condition="'$(OS)' != 'Windows_NT'">netcoreapp2.0</TargetFrameworks>
   <TestProjectType>UnitTest</TestProjectType>
 </PropertyGroup>
 <Target Name="Test">
-  <Exec Command="packages\xunit.runner.console.2.1.0\tools\xunit.console.exe $(OutputPath)\$(AssemblyName).dll -notrait"/>
+  <Exec Command="packages\xunit.runner.console\2.1.0\tools\xunit.console.exe $(OutputPath)\$(AssemblyName).dll -notrait"/>
 </Target>
 </Project>
