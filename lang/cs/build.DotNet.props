@@ -35,6 +35,11 @@ under the License.
     <DefaultItemExcludes>$(DefaultItemExcludes);**/AssemblyInfo.cs;packages.config;*.nuspec</DefaultItemExcludes>
   </PropertyGroup>
 
+  <!-- Allow for C# 7.2 language constructs -->
+  <PropertyGroup>
+    <LangVersion>7.2</LangVersion>
+  </PropertyGroup>
+  
   <PropertyGroup>
     <NoWarn>NU1701;NU1603</NoWarn>
     <DefineConstants>DOTNET_BUILD</DefineConstants>
@@ -48,7 +53,7 @@ under the License.
     <NSubstituteVersion>2.0.3</NSubstituteVersion>
     <ProtobufVersion>2.1.0</ProtobufVersion>
     <SystemReactiveVersion>3.1.1</SystemReactiveVersion>
-    <StyleCopVersion>4.7.49.1</StyleCopVersion>
+    <StyleCopVersion>5.0.0</StyleCopVersion>
     <TransientFaultHandlingVersion>1.0.0</TransientFaultHandlingVersion>
     <NSubstituteVersion>2.0.3</NSubstituteVersion>
     <WindowsAzureStorageVersion>8.1.3</WindowsAzureStorageVersion>
