@@ -18,14 +18,14 @@ under the License.
   <PropertyGroup>
     <AssemblyName>Org.Apache.REEF.Wake.Tests</AssemblyName>
   </PropertyGroup>
-  <Import Project="..\build.DotNetTest.targets" />
+  <Import Project="..\build.DotNetTest.props" />
   <ItemGroup>
     <PackageReference Include="System.Reactive.Core" Version="$(SystemReactiveVersion)" />
     <PackageReference Include="System.Reactive.Interfaces" Version="$(SystemReactiveVersion)" />
   </ItemGroup>
-  <Import Project="..\xunit.DotNet.props" />
   <ItemGroup>
     <ProjectReference Include="..\Org.Apache.REEF.Tang\Org.Apache.REEF.Tang.DotNet.csproj" />
     <ProjectReference Include="..\Org.Apache.REEF.Wake\Org.Apache.REEF.Wake.DotNet.csproj" />
   </ItemGroup>
+  <Import Project="..\build.DotNetTest.targets" />
 </Project>

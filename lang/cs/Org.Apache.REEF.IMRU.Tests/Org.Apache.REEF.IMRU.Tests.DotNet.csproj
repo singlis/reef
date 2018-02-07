@@ -20,7 +20,7 @@ under the License.
   <PropertyGroup>
     <AssemblyName>Org.Apache.REEF.IMRU.Tests</AssemblyName>
   </PropertyGroup>
-  <Import Project="..\build.DotNetTest.targets" />
+  <Import Project="..\build.DotNetTest.props" />
   <ItemGroup>
     <PackageReference Include="NSubstitute" Version="$(NSubstituteVersion)" />
   </ItemGroup>
@@ -34,7 +34,6 @@ under the License.
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
-  <Import Project="..\xunit.DotNet.props" />
   <ItemGroup>
     <ProjectReference Include="..\Org.Apache.REEF.IMRU\Org.Apache.REEF.IMRU.DotNet.csproj" />
     <ProjectReference Include="..\Org.Apache.REEF.Network\Org.Apache.REEF.Network.DotNet.csproj" />
@@ -46,4 +45,5 @@ under the License.
     <ProjectReference Include="..\Org.Apache.REEF.Utilities\Org.Apache.REEF.Utilities.DotNet.csproj" />
     <ProjectReference Include="..\Org.Apache.REEF.IO\Org.Apache.REEF.IO.DotNet.csproj" />
   </ItemGroup>
+  <Import Project="..\build.DotNetTest.targets" />
 </Project>
