@@ -21,6 +21,8 @@ under the License.
     <PackageTags>wake event-driven</PackageTags>
   </PropertyGroup>
   <Import Project="..\build.DotNetLibrary.props" />
+  <PropertyGroup>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="protobuf-net" Version="$(ProtobufVersion)" />
     <PackageReference Include="EnterpriseLibrary.TransientFaultHandling.Core" Version="$(TransientFaultHandlingVersion)" />
@@ -36,4 +38,5 @@ under the License.
     <ProjectReference Include="..\Org.Apache.REEF.Tang\Org.Apache.REEF.Tang.DotNet.csproj" />
     <ProjectReference Include="..\Org.Apache.REEF.Utilities\Org.Apache.REEF.Utilities.DotNet.csproj" />
   </ItemGroup>
+
 </Project>

@@ -18,7 +18,7 @@ under the License.
 
 <Import Project="build.DotNet.props"/>
 <PropertyGroup>
-  <TargetFrameworks>netcoreapp2.0;net46;net451</TargetFrameworks>
+  <TargetFrameworks>net451</TargetFrameworks>
   <TargetFrameworks Condition="'$(OS)' != 'Windows_NT'">netcoreapp2.0</TargetFrameworks>
 </PropertyGroup>
 </Project>
