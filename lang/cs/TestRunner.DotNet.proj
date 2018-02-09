@@ -1,4 +1,4 @@
-<Project>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -15,11 +15,18 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
-
-<Import Project="build.DotNet.props"/>
-<Import Project="xunit.DotNet.props"/>
-<PropertyGroup>
-  <TargetFrameworks>net451</TargetFrameworks>
-  <TargetFrameworks Condition="'$(OS)' != 'Windows_NT'">netcoreapp2.0</TargetFrameworks>
-</PropertyGroup>
+<Project DefaultTargets="Test" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ProjectReferences Include="*\*.Tests.DotNet.csproj" />
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == '' ">
+    <Configuration>Debug</Configuration>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == '' ">
+    <Platform>x64</Platform>
+  </PropertyGroup>
+  <Target Name="Test">
+    <MSBuild Projects="@(ProjectReferences)"
+             Targets="Test" Properties="Configuration=$(Configuration);Platform=$(Platform)" StopOnFirstFailure="false" />
+  </Target>
 </Project>
