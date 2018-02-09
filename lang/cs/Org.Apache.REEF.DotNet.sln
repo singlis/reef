@@ -62,6 +62,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Org.Apache.REEF.Tests.DotNet", "Org.Apache.REEF.Tests\Org.Apache.REEF.Tests.DotNet.csproj", "{C80B4A96-BAAD-4526-921C-FB5DADBC135E}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Org.Apache.REEF.Bridge.DotNet", "Org.Apache.REEF.Bridge\Org.Apache.REEF.Bridge.DotNet.vcxproj", "{6C7325D1-EBB6-4642-B34F-B66F46152230}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4AFF480F-006F-4229-8565-DB8F0E5F0C1D} = {4AFF480F-006F-4229-8565-DB8F0E5F0C1D}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
