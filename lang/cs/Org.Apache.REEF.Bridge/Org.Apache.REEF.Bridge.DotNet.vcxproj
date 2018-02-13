@@ -21,10 +21,11 @@ under the License.
     <Configuration Condition="'$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition="'$(Platform)' == ''">x64</Platform>
     <SolutionDir Condition="'$(SolutionDir)' == ''">..</SolutionDir>
-    <RestorePackages>true</RestorePackages>
+    <DotNetRestore>false</DotNetRestore>
     <ConfigurationType>Application</ConfigurationType>
   </PropertyGroup>
-  <Import Project="$(SolutionDir)\build.DotNet.props" />
+  <Import Project="..\build.DotNet.props" />
+  <Import Project="..\build.DotNet.targets" />
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
       <Configuration>Debug</Configuration>
@@ -189,16 +190,16 @@ under the License.
     <Image Include="app.ico" />
   </ItemGroup>
   <ItemGroup>
-    <!--
-    <ProjectReference Include="..\Org.Apache.REEF.Bridge.JAR\Org.Apache.REEF.Bridge.JAR.DotNet.csproj">
-      <Project>{62905c7c-1a7e-4923-b78d-1bf42d7fad40}</Project>
+
+    <ProjectReference Include="$(SolutionDir)\Org.Apache.REEF.Bridge.JAR\Org.Apache.REEF.Bridge.JAR.DotNet.csproj">
+      <!-- <Project>{62905c7c-1a7e-4923-b78d-1bf42d7fad40}</Project> -->
       <Private>false</Private>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
-    -->
+
     <ProjectReference Include="..\Org.Apache.REEF.Driver\Org.Apache.REEF.Driver.DotNet.csproj">
       <Project>{a6baa2a7-f52f-4329-884e-1bcf711d6805}</Project>
     </ProjectReference>

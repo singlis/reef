@@ -54,4 +54,5 @@ under the License.
     <ProjectReference Include="..\Org.Apache.REEF.Examples.HelloREEF\Org.Apache.REEF.Examples.HelloREEF.DotNet.csproj" />
   </ItemGroup>
   <Import Project="..\build.DotNetTest.targets" />
+  <Import Project="$(SolutionDir)\build.DotNet.targets"/>
 </Project>

@@ -33,8 +33,12 @@ under the License.
         <!-- Download NuGet.exe if it does not already exist -->
         <DownloadNuGetExe Condition=" '$(DownloadNuGetExe)' == '' ">true</DownloadNuGetExe>
     </PropertyGroup>
-    <Import Project="$(SolutionDir)\build.props" Condition="'$(BuildDotPropsIsImported)'!='true'" />
-    <Import Project="$(SolutionDir)\build.targets" Condition="'$(BuildDotTargetsIsImported)'!='true'"/>
+
+    <!--
+     <Import Project="$(SolutionDir)\build.DotNet.props" Condition="'$(BuildDotPropsIsImported)'!='true'" />
+     <Import Project="$(SolutionDir)\build.targets" Condition="'$(BuildDotTargetsIsImported)'!='true'"/>
+    -->
+
     <ItemGroup Condition=" '$(PackageSources)' == '' ">
         <!-- Package sources used to restore packages. By default, registered sources under %APPDATA%\NuGet\NuGet.Config will be used -->
         <!-- The official NuGet package source (https://www.nuget.org/api/v2/) will be excluded if package sources are specified and it does not appear in the list -->
@@ -89,10 +93,14 @@ under the License.
         <NugetProjectPath>$(SolutionDir)\$(RootNamespace)</NugetProjectPath>
 
         <!-- Commands -->
+        <!--
         <RestoreCommand>$(NuGetCommand) install "$(PackagesConfig)" -source "$(PackageSources)"  $(NonInteractiveSwitch) $(RequireConsentSwitch) -solutionDir $(PaddedSolutionDir)</RestoreCommand>
+        -->
+        <RestoreCommand>dotnet restore $(Project)</RestoreCommand>
 
         <!-- We need to ensure packages are restored prior to assembly resolve -->
         <BuildDependsOn Condition="$(RestorePackages) == 'true'">
+            <Message Text="This is being called1"/>
             RestorePackages;
             $(BuildDependsOn);
         </BuildDependsOn>

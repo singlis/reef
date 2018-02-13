@@ -19,9 +19,16 @@ under the License.
     <AssemblyName>Org.Apache.REEF.Utilities</AssemblyName>
     <Description>Common utilities such as logging shared across REEF/Wake/Tang</Description>
     <PackageTags>Apache REEF REEF/Wake/Tang common utilities</PackageTags>
+    <RestorePackages>true</RestorePackages>
+    <ImportNuGetBuildTasksPackTargetsFromSdk>true</ImportNuGetBuildTasksPackTargetsFromSdk>
+    <BuildDependsOn>
+      DisplayMessages;
+      $(BuildDependsOn);
+    </BuildDependsOn>
   </PropertyGroup>
   <Import Project="..\build.DotNetLibrary.props" />
   <ItemGroup>
       <PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJsonVersion)" />
   </ItemGroup>
+  <Import Project="..\build.DotNet.targets"/>
 </Project>

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -15,18 +15,15 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
-  <PropertyGroup>
-    <AssemblyName>Org.Apache.REEF.Tang.Tools</AssemblyName>
-    <Description>Tools for Tang</Description>
-    <PackageTags>Apache REEF Tang dependency injection</PackageTags>
-    <OutputType>Exe</OutputType>
-  </PropertyGroup>
-  <Import Project="..\build.DotNetApp.props" />
-  <ItemGroup>
-    <ProjectReference Include="..\Org.Apache.REEF.Tang\Org.Apache.REEF.Tang.DotNet.csproj" />
-    <ProjectReference Include="..\Org.Apache.REEF.Common\Org.Apache.REEF.Common.DotNet.csproj" />
-    <ProjectReference Include="..\Org.Apache.REEF.Examples\Org.Apache.REEF.Examples.DotNet.csproj" />
-  </ItemGroup>
-  <Import Project="$(SolutionDir)\build.DotNet.targets"/>
+<Project>
+<!--
+    <Import Project="$(SolutionDir)\pomversion.DotNet.targets"/>
+    <Import Project=".nuget\NuGet.DotNet.targets" Condition="Exists('.nuget\NuGet.DotNet.targets')" />
+    -->
+  <Target Name="DotNetRestore" BeforeTargets="BeforeBuild" Condition="'$(DotNetRestore)' == 'true'">
+    <Exec Command="dotnet restore --no-dependencies $(ProjectDir)\$(ProjectName).csproj"
+            LogStandardErrorAsError="true" />
+    <Message Text="Restore Packages for package $(ProjectName), $(RestorePackages)!!!!!" Importance="High"/>
+  </Target>
 </Project>
 

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk" >
+<Project Sdk="Microsoft.NET.Sdk">
   <!--
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -23,6 +23,7 @@ under the License.
     <PackageTags>REEF IO TestClient</PackageTags>
   </PropertyGroup>
   <Import Project="..\build.DotNetApp.props" />
+  <Import Project="$(SolutionDir)\build.targets" />
   <!-- TODO[JIRA REEF-1888] This item group will not be needed when only .netcore is targeted. -->
   <ItemGroup Condition="'$(TargetFramework)' == 'net451' Or '$(TargetFramework)' == 'net46'">
     <Reference Include="System" />
@@ -46,5 +47,6 @@ under the License.
     <ProjectReference Include="..\Org.Apache.REEF.Wake\Org.Apache.REEF.Wake.DotNet.csproj" />
     <ProjectReference Include="..\Org.Apache.REEF.IO\Org.Apache.REEF.IO.DotNet.csproj" />
   </ItemGroup>
-  <Import Project="..\build.DotNetTest.targets" />
+
+  <Import Project="$(SolutionDir)\build.DotNet.targets"/>
 </Project>

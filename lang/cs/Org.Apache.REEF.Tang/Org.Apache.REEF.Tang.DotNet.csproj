@@ -38,4 +38,5 @@ under the License.
   <ItemGroup>
     <ProjectReference Include="..\Org.Apache.REEF.Utilities\Org.Apache.REEF.Utilities.DotNet.csproj" />
   </ItemGroup>
+  <Import Project="$(SolutionDir)\build.DotNet.targets"/>
 </Project>
