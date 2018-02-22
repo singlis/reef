@@ -84,41 +84,53 @@ namespace Org.Apache.REEF.Common.Runtime.Evaluator
 
         public static void OpenPorts()
         {
-            var stdout = new StringBuilder();
-            var stderr = new StringBuilder();
-            var proc = new Process();
-            proc.StartInfo.UseShellExecute = false;
-            proc.StartInfo.CreateNoWindow = true;
-            proc.StartInfo.RedirectStandardOutput = true;
-            proc.StartInfo.RedirectStandardError = true;
-            proc.StartInfo.FileName = "netsh";
-            proc.OutputDataReceived += (sender, e) => { stdout.AppendLine(e.Data); };
-            proc.ErrorDataReceived += (sender, e) => { stderr.AppendLine(e.Data); };
+            string inRuleName = "\"REEF EvaluatorRuntime TCP All In\"";
+            string outRuleName = "\"REEF EvaluatorRuntime TCP All Out\"";
 
-            proc.StartInfo.Arguments = "advfirewall firewall delete rule name=\"EvaluatorRuntime-REEF-Evaluator-TCP-In\"";
-            proc.Start();
-            proc.BeginOutputReadLine();
-            proc.BeginErrorReadLine();
-            proc.WaitForExit();
-            Logger.Log(Level.Info, stdout.ToString());
+            CreatePortRule(inRuleName, true);
+            CreatePortRule(outRuleName, false);
+        }
 
-            proc.StartInfo.Arguments = "advfirewall firewall add rule name=\"EvaluatorRuntime-REEF-Evaluator-TCP-In\" dir=in action=allow protocol=TCP localport=any remoteport=any";
-            proc.Start();
-            proc.WaitForExit();
+        private static void CreatePortRule(string ruleName, bool isIn)
+        {
+            string dirStr = isIn ? "in" : "out";
 
-            proc.StartInfo.Arguments = "advfirewall firewall delete rule name=\"EvaluatorRuntime-REEF-Evaluator-TCP-Out\"";
-            proc.Start();
-            proc.WaitForExit();
+            string checkRuleCmd = string.Format("advfirewall firewall show rule name={0}", ruleName);
 
-            proc.StartInfo.Arguments = "advfirewall firewall add rule name=\"EvaluatorRuntime-REEF-Evaluator-TCP-Out\" dir=out action=allow protocol=TCP localport=any  remoteport=any";
-            proc.Start();
-            proc.WaitForExit();
+            string addRuleCmd = string.Format("advfirewall firewall add rule name ={0} dir={1} " +
+                "action=allow protocol=TCP localport=any remoteport=any", ruleName, dirStr);
 
-            Logger.Log(Level.Info, "====stdout====");
-            Logger.Log(Level.Info, stdout.ToString());
-            Logger.Log(Level.Info, "====stderr====");
-            Logger.Log(Level.Info, stderr.ToString());
-            Thread.Sleep(5000);
+            using (var p = new Process())
+            {
+                var stdout = new StringBuilder();
+                var stderr = new StringBuilder();
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.CreateNoWindow = true;
+                p.StartInfo.RedirectStandardOutput = true;
+                p.StartInfo.RedirectStandardError = true;
+                p.StartInfo.FileName = "netsh";
+                p.OutputDataReceived += (sender, e) => { stdout.AppendLine(e.Data); };
+                p.ErrorDataReceived += (sender, e) => { stderr.AppendLine(e.Data); };
+
+                p.StartInfo.Arguments = checkRuleCmd;
+                p.Start();
+                p.BeginOutputReadLine();
+                p.WaitForExit();
+
+                if (stdout.ToString().Contains("No rules match the specified criteria"))
+                {
+                    stdout.Clear();
+                    stderr.Clear();
+                    p.StartInfo.Arguments = addRuleCmd;
+                    p.Start();
+                    p.WaitForExit();
+                    Logger.Log(Level.Info, "Add Firewall Rule: " + ruleName);
+                }
+                else
+                {
+                    Logger.Log(Level.Info, "Firewall Rule Already Exists: " + ruleName);
+                }
+            }
         }
 
         private void EvaluatorRuntimeUnhandledException(object sender, UnhandledExceptionEventArgs e)
