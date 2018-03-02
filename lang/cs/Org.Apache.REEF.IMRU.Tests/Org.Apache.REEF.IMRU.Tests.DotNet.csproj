@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project>
   <!--
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -45,6 +45,5 @@ under the License.
     <ProjectReference Include="..\Org.Apache.REEF.Utilities\Org.Apache.REEF.Utilities.DotNet.csproj" />
     <ProjectReference Include="..\Org.Apache.REEF.IO\Org.Apache.REEF.IO.DotNet.csproj" />
   </ItemGroup>
-  <Import Project="$(SolutionDir)\build.DotNetTest.targets" />
-  <Import Project="$(SolutionDir)\build.DotNet.targets"/>
+  <Import Project="..\build.DotNetTest.targets" />
 </Project>

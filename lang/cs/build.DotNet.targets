@@ -16,14 +16,18 @@ specific language governing permissions and limitations
 under the License.
 -->
 <Project>
+  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
 <!--
     <Import Project="$(SolutionDir)\pomversion.DotNet.targets"/>
     <Import Project=".nuget\NuGet.DotNet.targets" Condition="Exists('.nuget\NuGet.DotNet.targets')" />
     -->
+    <!--
   <Target Name="DotNetRestore" BeforeTargets="BeforeBuild" Condition="'$(DotNetRestore)' == 'true'">
-    <Exec Command="dotnet restore --no-dependencies $(ProjectDir)\$(ProjectName).csproj"
+    <CallTarget Targets="Restore"/>
+    <Exec Command="dotnet restore $(ProjectDir)$(ProjectName).csproj"
             LogStandardErrorAsError="true" />
-    <Message Text="Restore Packages for package $(ProjectName), $(RestorePackages)!!!!!" Importance="High"/>
+    <Message Text="Restore Packages for package $(ProjectName), $(OutputPath)!!!!!" Importance="High"/>
   </Target>
+  -->
 </Project>
 
