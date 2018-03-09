@@ -41,6 +41,7 @@ namespace Org.Apache.REEF.Examples.HelloREEF
         private const string YARNRest = "yarnrest";
         private const string HDInsight = "hdi";
         private readonly IREEFClient _reefClient;
+        private readonly Logger _logger = Logger.GetLogger("test");
 
         [Inject]
         private HelloREEF(IREEFClient reefClient)
@@ -53,6 +54,15 @@ namespace Org.Apache.REEF.Examples.HelloREEF
         /// </summary>
         private void Run()
         {
+            System.Diagnostics.Trace.AutoFlush = true;
+            System.Diagnostics.TraceSource source = new System.Diagnostics.TraceSource("Foo", System.Diagnostics.SourceLevels.All);
+            source.Listeners.Add(new System.Diagnostics.TextWriterTraceListener(System.Console.Out));
+            for (int i =0; i < 1000; ++i)
+            {
+                source.TraceEvent(System.Diagnostics.TraceEventType.Information, 0, "This is a test");
+                //_logger.Log(Level.Info, "This is a test");
+            }
+
             // The driver configuration contains all the needed bindings.
             var helloDriverConfiguration = DriverConfiguration.ConfigurationModule
                 .Set(DriverConfiguration.OnEvaluatorAllocated, GenericType<HelloDriver>.Class)

@@ -33,13 +33,6 @@ under the License.
     <EmbeddedResource Include="$(TempResxFile)">
       <Generator>ResXFileCodeGenerator</Generator>
     </EmbeddedResource>
-    <!--
-    <Compile Update="Resources.DotNet.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.DotNet.resx</DependentUpon>
-    </Compile>
-    -->
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Avro.Core" Version="$(AvroVersion)" />

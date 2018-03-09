@@ -97,6 +97,8 @@ namespace Org {
               ManagedLog::LOGGER->Log("EvaluatorRequestorClr2Java::OnError");
               JNIEnv *env = RetrieveEnv(_jvm);
               HandleClr2JavaError(env, message, _jobjectEvaluatorRequestor);
+			  fflush(stdout);
+			  fflush(stderr);
             }
           }
         }

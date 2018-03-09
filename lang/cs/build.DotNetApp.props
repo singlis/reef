@@ -32,4 +32,10 @@ under the License.
   <!-- REEF-1888: win7-x64 is needed for .net46 and .net451. Target a newer version of windows once net46 and 451 are removed" -->
   <RuntimeIdentifiers>win7-x64</RuntimeIdentifiers>
 </PropertyGroup>
+<ItemGroup>
+    <None Include="$(SolutionDir)App.config">
+      <Link>App.config</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+</ItemGroup>
 </Project>

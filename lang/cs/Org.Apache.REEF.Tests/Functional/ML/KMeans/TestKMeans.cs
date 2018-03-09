@@ -161,7 +161,7 @@ namespace Org.Apache.REEF.Tests.Functional.ML.KMeans
                     .Set(REEF.Driver.DriverConfiguration.OnContextActive, GenericType<KMeansDriverHandlers>.Class)
                     .Set(REEF.Driver.DriverConfiguration.OnTaskCompleted, GenericType<KMeansDriverHandlers>.Class)
                     .Set(REEF.Driver.DriverConfiguration.CommandLineArguments, dataFilePath)
-                    .Set(REEF.Driver.DriverConfiguration.CustomTraceLevel, Level.Info.ToString())
+                    .Set(REEF.Driver.DriverConfiguration.CustomTraceLevel, Level.Verbose.ToString())
                     .Build())
                 .BindIntNamedParam<NumPartitions>(Partitions.ToString())
                 .Build();

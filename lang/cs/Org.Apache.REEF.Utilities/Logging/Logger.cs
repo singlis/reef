@@ -164,10 +164,9 @@ namespace Org.Apache.REEF.Utilities.Logging
                     + " : " + LogLevel[(int)level] + ": " 
                     + msg;
 
-                _traceSource.TraceEvent(
-                    EventTypes[level],
-                    0, // we don't use event id for now, but this can be useful for e2e logging later  
-                    logMessage);
+                _traceSource.TraceEvent(EventTypes[level], 0, logMessage);
+
+                _traceSource.Flush();
             }
         }
 

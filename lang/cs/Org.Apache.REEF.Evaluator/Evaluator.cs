@@ -68,6 +68,7 @@ namespace Org.Apache.REEF.Evaluator
         /// <param name="args"></param>
         public static void Main(string[] args)
         {
+            System.Diagnostics.Trace.AutoFlush = true;
             DefaultUnhandledExceptionHandler.Register();
 
             if (args.Count() != 1)
@@ -76,7 +77,7 @@ namespace Org.Apache.REEF.Evaluator
                 Utilities.Diagnostics.Exceptions.Throw(e, logger);
             }
 
-            if (IsDebuggingEnabled())
+            ////if (IsDebuggingEnabled())
             {
                 AttachDebugger();
             }

@@ -81,9 +81,7 @@ under the License.
         <PaddedSolutionDir Condition=" '$(OS)' != 'Windows_NT' ">"$(SolutionDir)"</PaddedSolutionDir>
 
         <!-- Nuspec file -->
-        <!-- 
         <FinalizedNuspecFile>$(SolutionDir)\$(AssemblyName)\$(AssemblyName).nuspec</FinalizedNuspecFile>
-        -->
 
         <!-- Project path -->
         <NugetProjectPath>$(SolutionDir)\$(RootNamespace)</NugetProjectPath>
