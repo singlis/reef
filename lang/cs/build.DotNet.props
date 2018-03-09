@@ -19,10 +19,11 @@ under the License.
   <Import Project="build.Common.DotNet.props" />
 
   <!-- Allow for C# 7.2 language constructs -->
+  <!-- 
   <PropertyGroup>
     <LangVersion>7.2</LangVersion>
   </PropertyGroup>
- 
+--> 
   <PropertyGroup>
     <AvroVersion>0.1.0</AvroVersion>
     <NewtonsoftJsonVersion>10.0.3</NewtonsoftJsonVersion>

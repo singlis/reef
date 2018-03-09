@@ -44,7 +44,6 @@ under the License.
     <PackagesDir Condition="$(PackagesDir) == '' Or $(PackagesDir) == '*Undefined*'">$(SolutionDir)\packages\</PackagesDir>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <NoWarn>NU1701;NU1603</NoWarn>
-    <DefineConstants>DOTNET_BUILD</DefineConstants>
     <OutputPath>$(BinDir).netcore\$(Configuration)\$(AssemblyName)\</OutputPath>
   </PropertyGroup>
 

@@ -21,6 +21,7 @@ under the License.
     <AssemblyName>Org.Apache.REEF.Common</AssemblyName>
     <Description>REEF Common Infrastructure</Description>
     <PackageTags>REEF Common Infrastructure</PackageTags>
+    <DefineConstants>REEF_DOTNET_BUILD</DefineConstants>
   </PropertyGroup>
   <Import Project="..\build.DotNetLibrary.props" />
   <ItemGroup>
@@ -42,6 +43,6 @@ under the License.
     <ProjectReference Include="..\Org.Apache.REEF.Utilities\Org.Apache.REEF.Utilities.DotNet.csproj" />
     <ProjectReference Include="..\Org.Apache.REEF.Wake\Org.Apache.REEF.Wake.DotNet.csproj" />
   </ItemGroup>
-  <Import Project="..\build.DotNet.targets"/>
+  <Import Project="..\build.DotNet.targets" />
 </Project>
 

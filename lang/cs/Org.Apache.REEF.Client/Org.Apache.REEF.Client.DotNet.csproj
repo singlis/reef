@@ -21,7 +21,7 @@ under the License.
     <AssemblyName>Org.Apache.REEF.Client</AssemblyName>
     <Description>Client for REEF.NET</Description>
     <PackageTags>REEF Client</PackageTags>
-
+    <DefineConstants>REEF_DOTNET_BUILD</DefineConstants>
     <!-- Disable default embedded resources as we override this in the project -->
     <EnableDefaultEmbeddedResourceItems>False</EnableDefaultEmbeddedResourceItems>
   </PropertyGroup>

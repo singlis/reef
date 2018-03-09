@@ -21,6 +21,7 @@ under the License.
     <AssemblyName>Org.Apache.REEF.IO</AssemblyName>
     <Description>I/O library for Apache REEF</Description>
     <PackageTags> Apache REEF IO</PackageTags>
+    <DefineConstants>REEF_DOTNET_BUILD</DefineConstants>
   </PropertyGroup>
   <Import Project="..\build.DotNetLibrary.props" />
   <ItemGroup>
@@ -51,5 +52,5 @@ under the License.
     <ProjectReference Include="..\Org.Apache.REEF.Utilities\Org.Apache.REEF.Utilities.DotNet.csproj" />
     <ProjectReference Include="..\Org.Apache.REEF.Common\Org.Apache.REEF.Common.DotNet.csproj" />
   </ItemGroup>
-  <Import Project="..\build.DotNet.targets"/>
+  <Import Project="..\build.DotNet.targets" />
 </Project>

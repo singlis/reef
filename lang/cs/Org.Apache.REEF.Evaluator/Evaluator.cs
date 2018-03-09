@@ -77,7 +77,7 @@ namespace Org.Apache.REEF.Evaluator
                 Utilities.Diagnostics.Exceptions.Throw(e, logger);
             }
 
-            ////if (IsDebuggingEnabled())
+            if (IsDebuggingEnabled())
             {
                 AttachDebugger();
             }
