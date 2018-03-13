@@ -68,7 +68,6 @@ namespace Org.Apache.REEF.Evaluator
         /// <param name="args"></param>
         public static void Main(string[] args)
         {
-            System.Diagnostics.Trace.AutoFlush = true;
             DefaultUnhandledExceptionHandler.Register();
 
             if (args.Count() != 1)

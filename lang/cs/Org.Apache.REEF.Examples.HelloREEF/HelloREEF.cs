@@ -41,7 +41,6 @@ namespace Org.Apache.REEF.Examples.HelloREEF
         private const string YARNRest = "yarnrest";
         private const string HDInsight = "hdi";
         private readonly IREEFClient _reefClient;
-        private readonly Logger _logger = Logger.GetLogger("test");
 
         [Inject]
         private HelloREEF(IREEFClient reefClient)

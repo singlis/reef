@@ -43,6 +43,7 @@ under the License.
     <BinDir Condition="$(BinDir) == '' Or $(BinDir) == '*Undefined*'">$(SolutionDir)bin\.netcore\</BinDir>
     <PackagesDir Condition="$(PackagesDir) == '' Or $(PackagesDir) == '*Undefined*'">$(SolutionDir)\packages\</PackagesDir>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <DefineConstants>$(DefineConstants);REEF_DOTNET_BUILD</DefineConstants>
     <NoWarn>NU1701;NU1603</NoWarn>
     <OutputPath>$(BinDir)$(Configuration)\$(AssemblyName)\</OutputPath>
   </PropertyGroup>

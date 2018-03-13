@@ -21,7 +21,6 @@ under the License.
     <AssemblyName>Org.Apache.REEF.Common</AssemblyName>
     <Description>REEF Common Infrastructure</Description>
     <PackageTags>REEF Common Infrastructure</PackageTags>
-    <DefineConstants>REEF_DOTNET_BUILD</DefineConstants>
   </PropertyGroup>
   <Import Project="..\build.DotNetLibrary.props" />
   <ItemGroup>

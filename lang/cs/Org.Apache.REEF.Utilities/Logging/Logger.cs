@@ -164,9 +164,10 @@ namespace Org.Apache.REEF.Utilities.Logging
                     + " : " + LogLevel[(int)level] + ": " 
                     + msg;
 
-                _traceSource.TraceEvent(EventTypes[level], 0, logMessage);
-
-                _traceSource.Flush();
+                _traceSource.TraceEvent(
+                    EventTypes[level],
+                    0,
+                    logMessage);
             }
         }
 
