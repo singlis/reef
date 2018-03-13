@@ -40,7 +40,7 @@ under the License.
     <PackageReference Include="EnterpriseLibrary.TransientFaultHandling.Core" Version="$(TransientFaultHandlingVersion)" />
   </ItemGroup>
   <!-- TODO[JIRA REEF-1888] This item group will not be needed when only .netcore is targeted. -->
-  <ItemGroup Condition="'$(TargetFramework)' == 'net451' Or '$(TargetGramework)' == 'net46'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net452' Or '$(TargetFramework)' == 'net46'">
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -97,7 +97,7 @@ under the License.
       var srcDir = @"lang\cs\Org.Apache.REEF.Client\Properties";
       var binDir = @"lang\cs\bin\.netcore";
       var resxInputPath  = Path.Combine(ProjectFolder, srcDir, "Resources.DotNet.xml");      
-      var resourceDir = Path.Combine(ProjectFolder, binDir, DebugOrRelease, "Org.Apache.REEF.Bridge.JAR", "net451");
+      var resourceDir = Path.Combine(ProjectFolder, binDir, DebugOrRelease, "Org.Apache.REEF.Bridge.JAR", "net452");
       var clrDriverDir = Path.Combine(ProjectFolder, binDir, DebugOrRelease, "Org.Apache.REEF.Bridge");
       var byteArrayType = ";System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
       var jarRest = reefVersion + "-shaded.jar" + byteArrayType;
@@ -153,7 +153,7 @@ under the License.
   <Target Name="CopyJarFiles" BeforeTargets="RewriteClientResources">
     <MSBuild Targets="Build" BuildInParallel="$(BuildInParallel)" Properties="Chip=$(Chip);Lang=$(Lang)" Projects="@(ProjectFile)" />
     <ItemGroup>
-      <MySourceFiles Include="$(BinDir)\.netcore\$(Configuration)\Org.Apache.REEF.Bridge.JAR\net451\*.jar" />
+      <MySourceFiles Include="$(BinDir)$(Configuration)\Org.Apache.REEF.Bridge.JAR\$(TargetFramework)\*.jar" />
     </ItemGroup>
     <Copy SourceFiles="@(MySourceFiles)" DestinationFiles="@(MySourceFiles->'$(TargetDir)%(Filename)%(Extension)')" />
   </Target>

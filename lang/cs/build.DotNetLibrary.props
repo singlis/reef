@@ -18,7 +18,7 @@ under the License.
 
 <Import Project="build.DotNet.props"/>
 <PropertyGroup>
-  <TargetFrameworks>net451</TargetFrameworks>
+  <TargetFrameworks>net452</TargetFrameworks>
   <TargetFrameworks Condition="'$(OS)' != 'Windows_NT'">netstandard2.0</TargetFrameworks>
 </PropertyGroup>
 </Project>
