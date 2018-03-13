@@ -357,7 +357,7 @@ under the License.
   <Target Name="CopyJarFiles">
     <MSBuild Targets="Build" BuildInParallel="$(BuildInParallel)" Properties="Chip=$(Chip);Lang=$(Lang)" Projects="@(ProjectFile)" />
     <ItemGroup>
-      <MySourceFiles Include="$(BinDir)\**\Org.Apache.REEF.Bridge.JAR\*.jar" />
+      <MySourceFiles Include="$(Bindir)\**\Org.Apache.REEF.Bridge.JAR\*.jar" />
     </ItemGroup>
     <Copy SourceFiles="@(MySourceFiles)" DestinationFiles="@(MySourceFiles->'$(TargetDir)%(Filename)%(Extension)')" />
   </Target>

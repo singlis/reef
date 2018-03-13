@@ -48,6 +48,16 @@ under the License.
     <OutputPath>$(BinDir)$(Configuration)\$(AssemblyName)\</OutputPath>
   </PropertyGroup>
 
+  <!-- For linux builds, always enable the dot net build -->
+  <PropertyGroup Condition="'$(OS)' != 'Windows_NT'">
+    <EnableDotNetBuild>true</EnableDotNetBuild>
+  </PropertyGroup>
+
+  <!-- For window builds, we are defaulting the dot net build to false until dot net core is fully supported -->
+  <PropertyGroup Condition="'$(OS)' == 'Windows_NT'">
+    <EnableDotNetBuild>true</EnableDotNetBuild>
+  </PropertyGroup>
+
     <!-- Locations -->
   <PropertyGroup>
     <!--The root directory of the REEF source tree. -->
