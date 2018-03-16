@@ -20,13 +20,13 @@ under the License.
       <DebugType Condition="'$(TargetFramework)' != '' AND !$(TargetFramework.StartsWith('netcoreapp'))">Full</DebugType>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.0' Or '$(TargetFramework)' == 'net46'">
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" NoWarn="NU1701"/>
-    <PackageReference Include="xunit" Version="2.2.0" NoWarn="NU1701"/>
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" NoWarn="NU1701"/>
-    <PackageReference Include="xunit.runner.console" Version="2.2.0" NoWarn="NU1701"/>
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.0'">
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.6.1" NoWarn="NU1701"/>
+    <PackageReference Include="xunit" Version="2.3.1" NoWarn="NU1701"/>
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" NoWarn="NU1701"/>
+    <PackageReference Include="xunit.runner.console" Version="2.3.1" NoWarn="NU1701"/>
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net452'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net452' Or '$(TargetFramework)' == 'net461'">
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" NoWarn="NU1701"/>
     <PackageReference Include="xunit" Version="2.1.0" NoWarn="NU1701"/>
     <PackageReference Include="xunit.runner.visualstudio" Version="2.1.0" NoWarn="NU1701"/>

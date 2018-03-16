@@ -1,5 +1,5 @@
-﻿<Project>
-<!--
+﻿<Project ToolsVersion="15.0">
+  <!--
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
 distributed with this work for additional information
@@ -19,8 +19,13 @@ under the License.
 -->
   <PropertyGroup>
     <AssemblyName>Org.Apache.REEF.FatNuGet</AssemblyName>
-    <Description>Provide single package which contains all necessary REEF/WAKE/TANG projects./Description>
+    <Description>Provide single package which contains all necessary REEF/WAKE/TANG projects.</Description>
     <PackageTags>Single package which contains all Reef/Wake/Tang projects</PackageTags>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
   </PropertyGroup>
   <Import Project="..\build.DotNetLibrary.props" />
   <ItemGroup>
@@ -46,6 +51,5 @@ under the License.
     <ProjectReference Include="..\Org.Apache.REEF.Wake\Org.Apache.REEF.Wake.DotNet.csproj" />
     <ProjectReference Include="..\Org.Apache.REEF.IMRU.Examples\Org.Apache.REEF.IMRU.Examples.DotNet.csproj" />
   </ItemGroup>
-  <Import Project="..\build.DotNet.targets"/>
+  <Import Project="..\build.DotNet.targets" />
 </Project>
-
