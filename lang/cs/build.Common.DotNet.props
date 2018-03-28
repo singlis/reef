@@ -17,7 +17,7 @@ under the License.
 -->
 
   <PropertyGroup>
-    <Version>0.17.0</Version>
+    <Version>0.17.1</Version>
     <Authors>Apache Software Foundation</Authors>
     <Owners>The Apache REEF project</Owners>
     <Product>Apache REEF</Product>
@@ -46,6 +46,7 @@ under the License.
     <DefineConstants>$(DefineConstants);REEF_DOTNET_BUILD</DefineConstants>
     <NoWarn>NU1701;NU1603</NoWarn>
     <OutputPath>$(BinDir)$(Configuration)\$(AssemblyName)\</OutputPath>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <!-- For linux builds, always enable the dot net build -->
