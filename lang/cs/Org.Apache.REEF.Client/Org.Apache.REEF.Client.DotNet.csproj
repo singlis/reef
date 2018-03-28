@@ -59,15 +59,6 @@ under the License.
     <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>
 
-  <!-- Project Reference conditionals allow for targeting specific projects based upon the target framework. -->
-  <!--
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <ProjectReference Include="..\Org.Apache.REEF.Bridge\Org.Apache.REEF.Bridge.DotNet.vcxproj" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <ProjectReference Include="..\Org.Apache.REEF.Bridge\Org.Apache.REEF.Bridge.DotNet.vcxproj" />
-  </ItemGroup>
--->
   <ItemGroup>
     <ProjectReference Include="..\Org.Apache.REEF.Utilities\Org.Apache.REEF.Utilities.DotNet.csproj" />
     <ProjectReference Include="..\Org.Apache.REEF.Tang\Org.Apache.REEF.Tang.DotNet.csproj" />
@@ -113,13 +104,14 @@ under the License.
       var resxInputPath  = Path.Combine(ProjectFolder, srcDir, "Resources.DotNet.xml");      
       var resourceDir = Path.Combine(ProjectFolder, binDir, DebugOrRelease, "Org.Apache.REEF.Bridge.JAR", "net461");
       var clrDriverDir = Path.Combine(ProjectFolder, binDir, DebugOrRelease, "Org.Apache.REEF.Bridge");
+      var evaluatorDir = Path.Combine(ProjectFolder, binDir, DebugOrRelease, "Org.Apache.REEF.Evaluator", "net461");
       var byteArrayType = ";System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
       var jarRest = reefVersion + "-shaded.jar" + byteArrayType;
 
       var dllResources = new Dictionary<string,string>();
       dllResources.Add("reef_bridge_client", resourceDir + @"\reef-bridge-client-" + jarRest);
       dllResources.Add("reef_bridge_driver", resourceDir + @"\reef-bridge-java-" + jarRest);
-      dllResources.Add("evaluator", resourceDir + "Org.Apache.REEF.Evaluator.exe" + byteArrayType);
+      dllResources.Add("evaluator", evaluatorDir + @"\Org.Apache.REEF.Evaluator.exe" + byteArrayType);
       dllResources.Add("reef_clrdriver", clrDriverDir + @"\Org.Apache.REEF.Bridge.exe" + byteArrayType);
       dllResources.Add("ClientJarFullName", "reef-bridge-client-" + reefVersion + "-shaded.jar");
       dllResources.Add("DriverJarFullName", "reef-bridge-java-" + reefVersion + "-shaded.jar");

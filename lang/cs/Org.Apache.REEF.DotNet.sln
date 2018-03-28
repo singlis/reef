@@ -1,4 +1,5 @@
-﻿Microsoft Visual Studio Solution File, Format Version 12.00
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
@@ -44,6 +45,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Org.Apache.REEF.Driver.DotN
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Org.Apache.REEF.Client.DotNet", "Org.Apache.REEF.Client\Org.Apache.REEF.Client.DotNet.csproj", "{A23F679F-233A-41A1-9964-61A0576E5D93}"
 	ProjectSection(ProjectDependencies) = postProject
+		{74A9ED6D-EE76-4DFF-A921-F6D761C2CB7A} = {74A9ED6D-EE76-4DFF-A921-F6D761C2CB7A}
 		{6C7325D1-EBB6-4642-B34F-B66F46152230} = {6C7325D1-EBB6-4642-B34F-B66F46152230}
 	EndProjectSection
 EndProject
@@ -73,7 +75,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Org.Apache.REEF.Tests.DotNe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Org.Apache.REEF.FatNuGet.DotNet", "Org.Apache.REEF.FatNuGet\Org.Apache.REEF.FatNuGet.DotNet.csproj", "{F7D5EAB5-65F8-45B5-9318-60EC311E08C6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}}") = "Org.Apache.REEF.Bridge.CLR.DotNet", "Org.Apache.REEF.Bridge.CLR\Org.Apache.REEF.Bridge.CLR.DotNet.csproj", "{81575917-C673-4E6F-9CF1-0DD35FC5E717}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Org.Apache.REEF.Bridge.CLR.DotNet", "Org.Apache.REEF.Bridge.CLR\Org.Apache.REEF.Bridge.CLR.DotNet.csproj", "{81575917-C673-4E6F-9CF1-0DD35FC5E717}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

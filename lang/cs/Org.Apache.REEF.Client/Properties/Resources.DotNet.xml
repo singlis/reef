@@ -98,4 +98,7 @@ This file is used to embed JAR files to client dll
   <data name="reef_clrdriver" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>E:\src\reef\lang\cs\bin\x64\Debug\Org.Apache.REEF.ClrDriver\Org.Apache.REEF.ClrDriver.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="evaluator" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>E:\src\reef\lang\cs\bin\x64\Debug\Org.Apache.REEF.Evaluator\Org.Apache.REEF.Evaluator.exe</value>
+  </data>
 </root>
