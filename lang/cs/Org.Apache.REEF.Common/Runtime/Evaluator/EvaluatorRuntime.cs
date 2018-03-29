@@ -91,40 +91,47 @@ namespace Org.Apache.REEF.Common.Runtime.Evaluator
             CreatePortRule(outRuleName, false);
         }
 
+        private static Process MakeProcess(string cmd)
+        {
+            var p = new Process();
+            var stdout = new StringBuilder();
+            var stderr = new StringBuilder();
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.CreateNoWindow = true;
+            p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.RedirectStandardError = true;
+            p.StartInfo.FileName = "netsh";
+            p.StartInfo.Verb = "runas";
+            p.OutputDataReceived += (sender, e) => { stdout.AppendLine(e.Data); };
+            p.ErrorDataReceived += (sender, e) => { stderr.AppendLine(e.Data); };
+            p.StartInfo.Arguments = cmd;
+
+            return p;
+        }
+
         private static void CreatePortRule(string ruleName, bool isIn)
         {
             string dirStr = isIn ? "in" : "out";
 
             string checkRuleCmd = string.Format("advfirewall firewall show rule name={0}", ruleName);
 
-            string addRuleCmd = string.Format("advfirewall firewall add rule name ={0} dir={1} " +
+            string addRuleCmd = string.Format("advfirewall firewall add rule name={0} dir={1} " +
                 "action=allow protocol=TCP localport=any remoteport=any", ruleName, dirStr);
 
-            using (var p = new Process())
+            using (var pCheck = MakeProcess(checkRuleCmd))
             {
-                var stdout = new StringBuilder();
-                var stderr = new StringBuilder();
-                p.StartInfo.UseShellExecute = false;
-                p.StartInfo.CreateNoWindow = true;
-                p.StartInfo.RedirectStandardOutput = true;
-                p.StartInfo.RedirectStandardError = true;
-                p.StartInfo.FileName = "netsh";
-                p.OutputDataReceived += (sender, e) => { stdout.AppendLine(e.Data); };
-                p.ErrorDataReceived += (sender, e) => { stderr.AppendLine(e.Data); };
+                pCheck.Start();
+                pCheck.WaitForExit();
 
-                p.StartInfo.Arguments = checkRuleCmd;
-                p.Start();
-                p.BeginOutputReadLine();
-                p.WaitForExit();
-
-                if (stdout.ToString().Contains("No rules match the specified criteria"))
+                if (pCheck.ExitCode == 1)
                 {
-                    stdout.Clear();
-                    stderr.Clear();
-                    p.StartInfo.Arguments = addRuleCmd;
-                    p.Start();
-                    p.WaitForExit();
-                    Logger.Log(Level.Info, "Add Firewall Rule: " + ruleName);
+                    using (var pAdd = MakeProcess(addRuleCmd))
+                    {
+                        pAdd.Start();
+                        pAdd.WaitForExit();
+                        Logger.Log(Level.Info, "ExitCode for Add Process: " + pAdd.ExitCode);
+                        Logger.Log(Level.Info, "Add Firewall Rule: " + ruleName);
+                    }
                 }
                 else
                 {
