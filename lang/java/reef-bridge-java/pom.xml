@@ -27,7 +27,7 @@ under the License.
     <parent>
         <groupId>org.apache.reef</groupId>
         <artifactId>reef-project</artifactId>
-        <version>0.16.0-SNAPSHOT</version>
+        <version>0.17.0-SNAPSHOT</version>
         <relativePath>../../..</relativePath>
     </parent>
 
@@ -49,6 +49,11 @@ under the License.
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>reef-runtime-yarn</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>reef-runtime-azbatch</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -100,7 +105,7 @@ under the License.
                             <goal>schema</goal>
                         </goals>
                         <configuration>
-                            <sourceDirectory>${project.basedir}/src/main/avro/</sourceDirectory>
+                            <sourceDirectory>${rootPath}/lang/common/bridge/avro/</sourceDirectory>
                             <outputDirectory>${project.basedir}/target/generated-sources/avro/</outputDirectory>
                         </configuration>
                     </execution>

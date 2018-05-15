@@ -21,6 +21,7 @@ package org.apache.reef.runtime.yarn.driver;
 import com.google.protobuf.ByteString;
 import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+
 import org.apache.hadoop.fs.*;
 import org.apache.hadoop.service.Service;
 import org.apache.hadoop.yarn.api.records.*;
@@ -29,7 +30,9 @@ import org.apache.hadoop.yarn.client.api.async.AMRMClientAsync;
 import org.apache.hadoop.yarn.client.api.async.NMClientAsync;
 import org.apache.hadoop.yarn.client.api.async.impl.NMClientAsyncImpl;
 import org.apache.hadoop.yarn.conf.YarnConfiguration;
-import org.apache.hadoop.yarn.exceptions.YarnException;
+
+import org.apache.reef.annotations.audience.DriverSide;
+import org.apache.reef.annotations.audience.Private;
 import org.apache.reef.driver.ProgressProvider;
 import org.apache.reef.proto.ReefServiceProtos;
 import org.apache.reef.runtime.common.driver.DriverStatusManager;
@@ -39,31 +42,32 @@ import org.apache.reef.runtime.common.driver.resourcemanager.ResourceEventImpl;
 import org.apache.reef.runtime.common.driver.resourcemanager.ResourceStatusEventImpl;
 import org.apache.reef.runtime.common.driver.resourcemanager.RuntimeStatusEventImpl;
 import org.apache.reef.runtime.common.files.REEFFileNames;
+import org.apache.reef.runtime.yarn.client.unmanaged.YarnProxyUser;
 import org.apache.reef.runtime.yarn.driver.parameters.JobSubmissionDirectory;
 import org.apache.reef.runtime.yarn.driver.parameters.YarnHeartbeatPeriod;
 import org.apache.reef.tang.InjectionFuture;
 import org.apache.reef.tang.annotations.Parameter;
 import org.apache.reef.util.Optional;
+import org.apache.reef.wake.remote.address.LocalAddressProvider;
 import org.apache.reef.wake.remote.impl.ObjectSerializableCodec;
 
 import javax.inject.Inject;
 import java.io.*;
 import java.nio.ByteBuffer;
+import java.security.PrivilegedExceptionAction;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-final class YarnContainerManager
-    implements AMRMClientAsync.CallbackHandler, NMClientAsync.CallbackHandler {
+@Private
+@DriverSide
+final class YarnContainerManager implements AMRMClientAsync.CallbackHandler, NMClientAsync.CallbackHandler {
 
   private static final Logger LOG = Logger.getLogger(YarnContainerManager.class.getName());
 
   private static final String RUNTIME_NAME = "YARN";
-
-  /** Default hostname to provide in the Application Master registration. */
-  private static final String AM_REGISTRATION_HOST = "";
 
   /** Default port number to provide in the Application Master registration. */
   private static final int AM_REGISTRATION_PORT = -1;
@@ -74,6 +78,7 @@ final class YarnContainerManager
 
   private final YarnConfiguration yarnConf;
   private final AMRMClientAsync<AMRMClient.ContainerRequest> resourceManager;
+  private final YarnProxyUser yarnProxyUser;
   private final NMClientAsync nodeManager;
   private final REEFEventHandlers reefEventHandlers;
   private final Containers containers;
@@ -81,7 +86,7 @@ final class YarnContainerManager
   private final ContainerRequestCounter containerRequestCounter;
   private final DriverStatusManager driverStatusManager;
   private final String trackingUrl;
-
+  private final String amRegistrationHost;
   private final String jobSubmissionDirectory;
   private final REEFFileNames reefFileNames;
   private final RackNameFormatter rackNameFormatter;
@@ -92,6 +97,7 @@ final class YarnContainerManager
       @Parameter(YarnHeartbeatPeriod.class) final int yarnRMHeartbeatPeriod,
       @Parameter(JobSubmissionDirectory.class) final String jobSubmissionDirectory,
       final YarnConfiguration yarnConf,
+      final YarnProxyUser yarnProxyUser,
       final REEFEventHandlers reefEventHandlers,
       final Containers containers,
       final ApplicationMasterRegistration registration,
@@ -99,6 +105,7 @@ final class YarnContainerManager
       final DriverStatusManager driverStatusManager,
       final REEFFileNames reefFileNames,
       final TrackingURLProvider trackingURLProvider,
+      final LocalAddressProvider addressProvider,
       final RackNameFormatter rackNameFormatter,
       final InjectionFuture<ProgressProvider> progressProvider) throws IOException {
 
@@ -109,8 +116,11 @@ final class YarnContainerManager
     this.registration = registration;
     this.containerRequestCounter = containerRequestCounter;
     this.yarnConf = yarnConf;
+    this.yarnProxyUser = yarnProxyUser;
     this.rackNameFormatter = rackNameFormatter;
+
     this.trackingUrl = trackingURLProvider.getTrackingUrl();
+    this.amRegistrationHost = addressProvider.getLocalAddress();
 
     this.resourceManager = AMRMClientAsync.createAMRMClientAsync(yarnRMHeartbeatPeriod, this);
     this.nodeManager = new NMClientAsyncImpl(this);
@@ -119,7 +129,8 @@ final class YarnContainerManager
     this.reefFileNames = reefFileNames;
     this.progressProvider = progressProvider;
 
-    LOG.log(Level.FINEST, "Instantiated YarnContainerManager: {0}", this.registration);
+    LOG.log(Level.INFO, "Instantiated YarnContainerManager: {0} {1}, trackingUrl: {3}, jobSubmissionDirectory: {4}.",
+        new Object[] {this.registration, this.yarnProxyUser, this.trackingUrl, this.jobSubmissionDirectory});
   }
 
   /**
@@ -308,21 +319,26 @@ final class YarnContainerManager
 
     LOG.log(Level.FINEST, "YARN registration: begin");
 
-    this.resourceManager.init(this.yarnConf);
-    this.resourceManager.start();
-
     this.nodeManager.init(this.yarnConf);
     this.nodeManager.start();
 
-    LOG.log(Level.FINEST, "YARN registration: registered with RM and NM");
-
     try {
 
+      this.yarnProxyUser.doAs(
+          new PrivilegedExceptionAction<Object>() {
+            @Override
+            public Object run() throws Exception {
+              resourceManager.init(yarnConf);
+              resourceManager.start();
+              return null;
+            }
+          });
+
       LOG.log(Level.FINE, "YARN registration: register AM at \"{0}:{1}\" tracking URL \"{2}\"",
-          new Object[] {AM_REGISTRATION_HOST, AM_REGISTRATION_PORT, this.trackingUrl});
+          new Object[] {amRegistrationHost, AM_REGISTRATION_PORT, this.trackingUrl});
 
       this.registration.setRegistration(this.resourceManager.registerApplicationMaster(
-          AM_REGISTRATION_HOST, AM_REGISTRATION_PORT, this.trackingUrl));
+          amRegistrationHost, AM_REGISTRATION_PORT, this.trackingUrl));
 
       LOG.log(Level.FINE, "YARN registration: AM registered: {0}", this.registration);
 
@@ -333,7 +349,7 @@ final class YarnContainerManager
         out.writeBytes(this.trackingUrl + '\n');
       }
 
-    } catch (final YarnException | IOException e) {
+    } catch (final Exception e) {
       LOG.log(Level.WARNING, "Unable to register application master.", e);
       onRuntimeError(e);
     }
@@ -546,8 +562,11 @@ final class YarnContainerManager
   }
 
   private boolean isSameKindOfRequest(final AMRMClient.ContainerRequest r1, final AMRMClient.ContainerRequest r2) {
+    final boolean nodeLabelExpressionIsEqual = r1.getNodeLabelExpression() == r2.getNodeLabelExpression() ||
+        (r1.getNodeLabelExpression() != null && r1.getNodeLabelExpression().equals(r2.getNodeLabelExpression()));
     return r1.getPriority().compareTo(r2.getPriority()) == 0
         && r1.getCapability().compareTo(r2.getCapability()) == 0
+        && nodeLabelExpressionIsEqual
         && r1.getRelaxLocality() == r2.getRelaxLocality()
         && ListUtils.isEqualList(r1.getNodes(), r2.getNodes())
         && ListUtils.isEqualList(r1.getRacks(), r2.getRacks());

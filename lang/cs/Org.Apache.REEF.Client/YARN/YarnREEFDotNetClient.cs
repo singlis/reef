@@ -40,7 +40,7 @@ namespace Org.Apache.REEF.Client.YARN
     /// deprecated by final client.
     /// </summary>
     [Unstable("For security token support we still need to use YARNREEFClient until (REEF-875)")]
-    public sealed class YarnREEFDotNetClient : IREEFClient
+    public sealed class YarnREEFDotNetClient : IYarnREEFClient
     {
         private const string REEFApplicationType = @"REEF";
         private static readonly Logger Log = Logger.GetLogger(typeof(YarnREEFDotNetClient));
@@ -51,6 +51,7 @@ namespace Org.Apache.REEF.Client.YARN
         private readonly REEFFileNames _fileNames;
         private readonly IJobSubmissionDirectoryProvider _jobSubmissionDirectoryProvider;
         private readonly YarnREEFDotNetParamSerializer _paramSerializer;
+        private readonly JobRequestBuilderFactory _jobRequestBuilderFactory;
 
         [Inject]
         private YarnREEFDotNetClient(
@@ -60,7 +61,8 @@ namespace Org.Apache.REEF.Client.YARN
             IJobResourceUploader jobResourceUploader,
             REEFFileNames fileNames,
             IJobSubmissionDirectoryProvider jobSubmissionDirectoryProvider,
-            YarnREEFDotNetParamSerializer paramSerializer)
+            YarnREEFDotNetParamSerializer paramSerializer,
+            JobRequestBuilderFactory jobRequestBuilderFactory)
         {
             _injector = injector;
             _jobSubmissionDirectoryProvider = jobSubmissionDirectoryProvider;
@@ -69,6 +71,7 @@ namespace Org.Apache.REEF.Client.YARN
             _driverFolderPreparationHelper = driverFolderPreparationHelper;
             _yarnRMClient = yarnRMClient;
             _paramSerializer = paramSerializer;
+            _jobRequestBuilderFactory = jobRequestBuilderFactory;
         }
 
         public void Submit(JobRequest jobRequest)
@@ -135,6 +138,11 @@ namespace Org.Apache.REEF.Client.YARN
             }
         }
 
+        public JobRequestBuilder NewJobRequestBuilder()
+        {
+            return _jobRequestBuilderFactory.NewInstance();
+        }
+
         public IJobSubmissionResult SubmitAndGetJobStatus(JobRequest jobRequest)
         {
             throw new NotSupportedException();
@@ -144,6 +152,27 @@ namespace Org.Apache.REEF.Client.YARN
         {
             var application = await _yarnRMClient.GetApplicationAsync(appId).ConfigureAwait(false);
             return application.FinalStatus;
+        }
+
+        /// <summary>
+        /// Returns all the application reports running in the cluster
+        /// </summary>
+        /// <returns></returns>
+        /// TODO: [REEF-1825]: Implement GetApplicationReports to return the status of the applications.
+        public async Task<IReadOnlyDictionary<string, IApplicationReport>> GetApplicationReports()
+        {
+            await Task.Delay(0);
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Kills the application with specified application id.
+        /// </summary>
+        /// <param name="appId"></param>
+        /// <returns>Returns true if the application is killed otherwise returns false.</returns>
+        public async Task<bool> KillApplication(string appId)
+        {
+            return await _yarnRMClient.KillApplicationAsync(appId);
         }
 
         private SubmitApplication CreateApplicationSubmissionRequest(

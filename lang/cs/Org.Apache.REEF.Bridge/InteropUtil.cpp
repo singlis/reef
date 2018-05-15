@@ -70,6 +70,21 @@ jstring JavaStringFromManagedString(
   return env->NewString((const jchar*)wch, managedString->Length);
 }
 
+jobject JavaArrayListFromManagedList(
+    JNIEnv *env,
+    System::Collections::Generic::ICollection<String^>^ managedNodeNames) {
+
+    jclass arrayListClazz = (*env).FindClass("java/util/ArrayList");
+    jobject arrayListObj = (*env).NewObject(arrayListClazz, (*env).GetMethodID(arrayListClazz, "<init>", "()V"));
+
+    for each (String^ nodeName in managedNodeNames)
+    {
+        jstring nodeNamestr = JavaStringFromManagedString(env, nodeName);
+        (*env).CallBooleanMethod(arrayListObj, (*env).GetMethodID(arrayListClazz, "add", "(Ljava/lang/Object;)Z"), nodeNamestr);
+    }
+    return arrayListObj;
+}
+
 void HandleClr2JavaError(
   JNIEnv *env,
   String^ errorMessage,
@@ -120,13 +135,16 @@ jbyteArray JavaByteArrayFromManagedByteArray(
   return NULL;
 }
 
+__declspec(thread) JNIEnv *t_env = NULL;
 JNIEnv* RetrieveEnv(JavaVM* jvm) {
-  JNIEnv *env;
-  if (jvm->AttachCurrentThread((void **) &env, NULL) != 0) {
-    ManagedLog::LOGGER->Log("cannot attach jni env to current jvm thread.");
-    throw;
+  if (NULL == t_env)
+  {
+	if (jvm->AttachCurrentThread((void **)&t_env, NULL) != 0) {
+		ManagedLog::LOGGER->Log("cannot attach jni env to current jvm thread.");
+		throw;
+	}
   }
-  return env;
+  return t_env;
 }
 
 String^ FormatJavaExceptionMessage(String^ errorMessage, Exception^ exception, int recursionDepth) {

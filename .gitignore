@@ -29,6 +29,7 @@ atlassian-ide-plugin.xml
 *.VC.db
 *.vcxproj.user
 .vs
+.vscode
 #
 # ----------------------------------------------------------------------
 # OS Files
@@ -41,11 +42,12 @@ atlassian-ide-plugin.xml
 tmp
 *~
 \#*
+*.log
+*.sw[op]
 #
 # ----------------------------------------------------------------------
 # Unknown Files. Please clean up over time
 # ----------------------------------------------------------------------
 ml-data
 tang.conf
-*.sw[op]
 profile-*.json

@@ -40,6 +40,8 @@ public final class EvaluatorRequest {
   private final List<String> nodeNames;
   private final List<String> rackNames;
   private final String runtimeName;
+  private final boolean relaxLocality;
+  private final String nodeLabelExpression;
 
   EvaluatorRequest(final int number,
                    final int megaBytes,
@@ -55,12 +57,26 @@ public final class EvaluatorRequest {
                    final List<String> nodeNames,
                    final List<String> rackNames,
                    final String runtimeName) {
+    this(number, megaBytes, cores, nodeNames, rackNames, runtimeName, true, null);
+  }
+
+
+  EvaluatorRequest(final int number,
+                   final int megaBytes,
+                   final int cores,
+                   final List<String> nodeNames,
+                   final List<String> rackNames,
+                   final String runtimeName,
+                   final boolean relaxLocality,
+                   final String nodeLabelExpression) {
     this.number = number;
     this.megaBytes = megaBytes;
     this.cores = cores;
     this.nodeNames = nodeNames;
     this.rackNames = rackNames;
     this.runtimeName = runtimeName;
+    this.relaxLocality = relaxLocality;
+    this.nodeLabelExpression = nodeLabelExpression;
   }
 
   /**
@@ -137,6 +153,23 @@ public final class EvaluatorRequest {
   }
 
   /**
+   * Access the locality relax flag.
+   *
+   * @return the value of relaxLocality. If not set default is true.
+   */
+  public boolean getRelaxLocality() {
+    return relaxLocality;
+  }
+
+  /**
+   * Node label expression.
+   * @return string expression
+   */
+  public String getNodeLabelExpression() {
+    return nodeLabelExpression;
+  }
+
+  /**
    * {@link EvaluatorRequest}s are build using this Builder.
    */
   public static class Builder<T extends Builder> implements org.apache.reef.util.Builder<EvaluatorRequest> {
@@ -147,6 +180,8 @@ public final class EvaluatorRequest {
     private final List<String> nodeNames = new ArrayList<>();
     private final List<String> rackNames = new ArrayList<>();
     private String runtimeName = "";
+    private boolean relaxLocality = true; //if not set, default to true
+    private String nodeLabelExpression = null;
 
     @Private
     public Builder() {
@@ -163,12 +198,14 @@ public final class EvaluatorRequest {
       setMemory(request.getMegaBytes());
       setNumberOfCores(request.getNumberOfCores());
       setRuntimeName(request.getRuntimeName());
+      setRelaxLocality(request.getRelaxLocality());
       for (final String nodeName : request.getNodeNames()) {
         addNodeName(nodeName);
       }
       for (final String rackName : request.getRackNames()) {
         addRackName(rackName);
       }
+      setNodeLabelExpression(request.getNodeLabelExpression());
     }
 
     /**
@@ -233,6 +270,21 @@ public final class EvaluatorRequest {
     }
 
     /**
+     * Adds node names.They are the preferred locations where the evaluator should
+     * run on. If any of the node is available, the RM will try to allocate the
+     * evaluator there
+     *
+     * @param nodeNamesList preferred node names
+     * @return this Builder.
+     */
+    public T addNodeNames(final List<String> nodeNamesList) {
+      if(nodeNamesList != null) {
+        this.nodeNames.addAll(nodeNamesList);
+      }
+      return (T) this;
+    }
+
+    /**
      * Adds a rack name. It is the preferred location where the evaluator should
      * run on. If the rack is available, the RM will try to allocate the
      * evaluator in one of its nodes. The RM will try to match node names first,
@@ -247,11 +299,43 @@ public final class EvaluatorRequest {
     }
 
     /**
+     * A boolean relaxLocality flag defaulting to true, which tells the ResourceManager
+     * if the application wants locality to be loose (i.e. allows fall-through to rack or any)
+     * or strict (i.e. specify hard constraint on resource allocation).
+     *
+     * @param relaxLocalityFlg locality relaxation is enabled with this ResourceRequest
+     * @return this Builder.
+     */
+    public T setRelaxLocality(final boolean relaxLocalityFlg) {
+      this.relaxLocality = relaxLocalityFlg;
+      return (T) this;
+    }
+
+    /**
+     * A string expression that describes the node type being requested.
+     * @param nodeLabelExpr describing node type
+     * @return this Builder.
+     */
+    public T setNodeLabelExpression(final String nodeLabelExpr) {
+      this.nodeLabelExpression = nodeLabelExpr;
+      return (T) this;
+    }
+
+    /**
      * Builds the {@link EvaluatorRequest}.
      */
     @Override
     public EvaluatorRequest build() {
-      return new EvaluatorRequest(this.n, this.megaBytes, this.cores, this.nodeNames, this.rackNames, this.runtimeName);
+      return new EvaluatorRequest(this.n, this.megaBytes, this.cores, this.nodeNames,
+          this.rackNames, this.runtimeName, this.relaxLocality,
+          this.nodeLabelExpression);
+    }
+
+    /**
+     * Short-circuit submission method for subclass implementations.
+     */
+    public void submit() {
+      throw new UnsupportedOperationException();
     }
   }
 }

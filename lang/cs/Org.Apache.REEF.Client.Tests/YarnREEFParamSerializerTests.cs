@@ -83,10 +83,11 @@ namespace Org.Apache.REEF.Client.Tests
                 "\"jobSubmissionFolder\":\"{0}\"" +
                 "}}," +
                 "\"dfsJobSubmissionFolder\":\"{0}\"," +
+                "\"fileSystemUrl\":\"{1}\"," +
                 "\"jobSubmissionDirectoryPrefix\":\"{0}\"" +
                 "}}";
 
-            var expectedJson = string.Format(formatString, AnyString);
+            var expectedJson = string.Format(formatString, AnyString, "NULL");
             var injector = TangFactory.GetTang().NewInjector();
 
             var serializer = injector.GetInstance<YarnREEFDotNetParamSerializer>();
@@ -151,12 +152,14 @@ namespace Org.Apache.REEF.Client.Tests
                 "\"jobSubmissionFolder\":\"{0}\"" +
                 "}}," +
                 "\"dfsJobSubmissionFolder\":\"NULL\"," +
+                "\"fileSystemUrl\":\"{0}\"," +
                 "\"jobSubmissionDirectoryPrefix\":\"{0}\"" +
                 "}}," +
                 "\"securityTokenKind\":\"{0}\"," +
                 "\"securityTokenService\":\"{0}\"," +
                 "\"maxApplicationSubmissions\":{1}," +
                 "\"driverMemory\":{1}," +
+                "\"environmentVariablesMap\":{{\"key1\":\"{0}\",\"key2\":\"{0}\"}}," +
                 "\"driverStdoutFilePath\":\"{0}\"," +
                 "\"driverStderrFilePath\":\"{0}\"" +
                 "}}";
@@ -164,6 +167,7 @@ namespace Org.Apache.REEF.Client.Tests
             var conf = YARNClientConfiguration.ConfigurationModule
                 .Set(YARNClientConfiguration.SecurityTokenKind, AnyString)
                 .Set(YARNClientConfiguration.SecurityTokenService, AnyString)
+                .Set(YARNClientConfiguration.FileSystemUrl, AnyString)
                 .Set(YARNClientConfiguration.JobSubmissionFolderPrefix, AnyString)
                 .Build();
 
@@ -175,15 +179,17 @@ namespace Org.Apache.REEF.Client.Tests
                 .SetJobIdentifier(AnyString)
                 .SetMaxApplicationSubmissions(AnyInt)
                 .SetDriverMemory(AnyInt)
+                .SetJobSubmissionEnvironmentVariable("key1", AnyString)
+                .SetJobSubmissionEnvironmentVariable("key2", AnyString)
                 .SetDriverStderrFilePath(AnyString)
                 .SetDriverStdoutFilePath(AnyString)
                 .Build();
 
             var serializedBytes = serializer.SerializeJobArgsToBytes(jobRequest.JobParameters, AnyString);
-            var expectedString = Encoding.UTF8.GetString(serializedBytes);
-            var jsonObject = JObject.Parse(expectedString);
+            var actualString = Encoding.UTF8.GetString(serializedBytes);
+            var actualJsonObject = JObject.Parse(actualString);
             var expectedJsonObject = JObject.Parse(expectedJson);
-            Assert.True(JToken.DeepEquals(jsonObject, expectedJsonObject));
+            Assert.True(JToken.DeepEquals(actualJsonObject, expectedJsonObject));
         }
 
         private sealed class DriverStartHandler : IObserver<IDriverStarted>

@@ -54,6 +54,7 @@ public final class TestAvroJobSubmissionParametersSerializationFromCS {
             "\"jobSubmissionFolder\":" + STRING_REP_QUOTED +
           "}," +
           "\"dfsJobSubmissionFolder\":\"" + STRING_REP + "\"," +
+          "\"fileSystemUrl\":\"" + STRING_REP + "\"," +
           "\"jobSubmissionDirectoryPrefix\":" + STRING_REP_QUOTED +
       "}";
 
@@ -64,6 +65,10 @@ public final class TestAvroJobSubmissionParametersSerializationFromCS {
           "\"securityTokenService\":\"" + NULL_REP + "\"," +
           "\"maxApplicationSubmissions\":" + NUMBER_REP + "," +
           "\"driverMemory\":" + NUMBER_REP + "," +
+          "\"environmentVariablesMap\":" +
+          "{" +
+            "\"key\":" + STRING_REP_QUOTED +
+          "}," +
           "\"driverStdoutFilePath\":" + STRING_REP_QUOTED + "," +
           "\"driverStderrFilePath\":" + STRING_REP_QUOTED +
       "}";
@@ -178,7 +183,7 @@ public final class TestAvroJobSubmissionParametersSerializationFromCS {
     assert yarnClusterSubmissionFromCS.getTokenService().equals(NULL_REP);
     assert yarnClusterSubmissionFromCS.getYarnDriverStderrFilePath().equals(STRING_REP);
     assert yarnClusterSubmissionFromCS.getYarnDriverStdoutFilePath().equals(STRING_REP);
-
+    assert yarnClusterSubmissionFromCS.getEnvironmentVariablesMap().get("key").equals(STRING_REP);
     verifyYarnJobSubmissionParams(yarnClusterSubmissionFromCS.getYarnJobSubmissionParameters(),
         yarnClusterSubmissionFromCS.getYarnAppSubmissionParameters());
   }
@@ -345,6 +350,7 @@ public final class TestAvroJobSubmissionParametersSerializationFromCS {
     assert sharedJobSubmissionParams.getJobId().toString().equals(STRING_REP);
     assert sharedJobSubmissionParams.getJobSubmissionFolder().toString().equals(STRING_REP);
     assert jobSubmissionParameters.getDfsJobSubmissionFolder().toString().equals(STRING_REP);
+    assert jobSubmissionParameters.getFileSystemUrl().toString().equals(STRING_REP);
     assert jobSubmissionParameters.getJobSubmissionDirectoryPrefix().toString().equals(STRING_REP);
   }
 

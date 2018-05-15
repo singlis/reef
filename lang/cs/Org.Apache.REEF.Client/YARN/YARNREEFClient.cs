@@ -16,6 +16,8 @@
 // under the License.
 
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -29,10 +31,12 @@ using Org.Apache.REEF.Common.Files;
 using Org.Apache.REEF.Tang.Annotations;
 using Org.Apache.REEF.Tang.Implementations.Tang;
 using Org.Apache.REEF.Utilities.Logging;
+using Org.Apache.REEF.Client.API.Parameters;
+using Org.Apache.REEF.Client.Local.Parameters;
 
 namespace Org.Apache.REEF.Client.Yarn
 {
-    internal sealed class YarnREEFClient : IREEFClient
+    internal sealed class YarnREEFClient : IYarnREEFClient
     {
         /// <summary>
         /// The class name that contains the Java counterpart for this client.
@@ -45,6 +49,17 @@ namespace Org.Apache.REEF.Client.Yarn
         private readonly REEFFileNames _fileNames;
         private readonly IYarnRMClient _yarnClient;
         private readonly YarnREEFParamSerializer _paramSerializer;
+        private readonly JobRequestBuilderFactory _jobRequestBuilderFactory;
+
+        /// <summary>
+        /// Number of retries when connecting to the Driver's HTTP endpoint.
+        /// </summary>
+        private readonly int _numberOfRetries;
+
+        /// <summary>
+        /// Retry interval in ms when connecting to the Driver's HTTP endpoint.
+        /// </summary>
+        private readonly int _retryInterval;
 
         [Inject]
         internal YarnREEFClient(IJavaClientLauncher javaClientLauncher,
@@ -52,7 +67,10 @@ namespace Org.Apache.REEF.Client.Yarn
             REEFFileNames fileNames,
             YarnCommandLineEnvironment yarn,
             IYarnRMClient yarnClient,
-            YarnREEFParamSerializer paramSerializer)
+            YarnREEFParamSerializer paramSerializer,
+            JobRequestBuilderFactory jobRequestBuilderFactory,
+            [Parameter(typeof(DriverHTTPConnectionRetryInterval))]int retryInterval,
+            [Parameter(typeof(DriverHTTPConnectionAttempts))] int numberOfRetries)
         {
             _javaClientLauncher = javaClientLauncher;
             _javaClientLauncher.AddToClassPath(yarn.GetYarnClasspathList());
@@ -60,6 +78,9 @@ namespace Org.Apache.REEF.Client.Yarn
             _fileNames = fileNames;
             _yarnClient = yarnClient;
             _paramSerializer = paramSerializer;
+            _jobRequestBuilderFactory = jobRequestBuilderFactory;
+            _retryInterval = retryInterval;
+            _numberOfRetries = numberOfRetries;
         }
 
         public void Submit(JobRequest jobRequest)
@@ -71,6 +92,11 @@ namespace Org.Apache.REEF.Client.Yarn
             Launch(jobRequest, driverFolderPath);
         }
 
+        public JobRequestBuilder NewJobRequestBuilder()
+        {
+            return _jobRequestBuilderFactory.NewInstance();
+        }
+
         public IJobSubmissionResult SubmitAndGetJobStatus(JobRequest jobRequest)
         {
             // Prepare the job submission folder
@@ -80,7 +106,8 @@ namespace Org.Apache.REEF.Client.Yarn
             Launch(jobRequest, driverFolderPath);
 
             var pointerFileName = Path.Combine(driverFolderPath, _fileNames.DriverHttpEndpoint);
-            var jobSubmitionResultImpl = new YarnJobSubmissionResult(this, pointerFileName);
+            var jobSubmitionResultImpl = new YarnJobSubmissionResult(this, 
+                pointerFileName, _numberOfRetries, _retryInterval);
 
             var msg = string.Format(CultureInfo.CurrentCulture,
                 "Submitted the Driver for execution. Returned driverUrl is: {0}, appId is {1}.",
@@ -98,16 +125,65 @@ namespace Org.Apache.REEF.Client.Yarn
         {
             var application = await _yarnClient.GetApplicationAsync(appId);
 
-            var msg = string.Format("application status {0}, Progress: {1}, trackingUri: {2}, Name: {3}, ApplicationId: {4}, State {5}.",
-                application.FinalStatus, application.Progress, application.TrackingUI, application.Name, application.Id, application.State);
-            Logger.Log(Level.Verbose, msg);
+            Logger.Log(Level.Verbose,
+               "application status {0}, Progress: {1}, uri: {2}, Name: {3}, ApplicationId: {4}, State {5}.",
+               application.FinalStatus,
+               application.Progress,
+               application.TrackingUI,
+               application.Name,
+               application.Id,
+               application.State);
 
             return application.FinalStatus;
+        }
+
+        /// <summary>
+        /// Returns all the application reports running in the cluster.
+        /// GetApplicationReports call is very expensive as it is trying 
+        /// fetch information about all the applications in the cluster.
+        /// 
+        /// If this method is called right after submitting a new app then
+        /// that new app might not immediately result in this list until 
+        /// some number of retries. 
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IReadOnlyDictionary<string, IApplicationReport>> GetApplicationReports()
+        {
+            var appReports = new Dictionary<string, IApplicationReport>();
+            var applications = await _yarnClient.GetApplicationsAsync();
+
+            foreach (var application in applications.App)
+            {
+                appReports.Add(application.Id, new ApplicationReport(application.Id,
+                    application.Name,
+                    application.TrackingUrl,
+                    application.StartedTime,
+                    application.FinishedTime,
+                    application.RunningContainers,
+                    application.FinalStatus));
+
+                Logger.Log(Level.Verbose,
+                    "Application report {0}: {1}",
+                    application.Id, application);
+            }
+            return new ReadOnlyDictionary<string, IApplicationReport>(appReports);
+        }
+
+        /// <summary>
+        /// Kills the application with specified application id.
+        /// </summary>
+        /// <param name="appId">Application id to kill.</param>
+        /// <returns>Returns true if the application is killed otherwise returns false.</returns>
+        public async Task<bool> KillApplication(string appId)
+        {
+            return await _yarnClient.KillApplicationAsync(appId);
         }
 
         private void Launch(JobRequest jobRequest, string driverFolderPath)
         {
             _driverFolderPreparationHelper.PrepareDriverFolder(jobRequest.AppParameters, driverFolderPath);
+
+            _paramSerializer.WriteSecurityTokens();
 
             // TODO: Remove this when we have a generalized way to pass config to java
             var paramInjector = TangFactory.GetTang().NewInjector(jobRequest.DriverConfigurations.ToArray());

@@ -38,13 +38,15 @@ Build Instructions
 
 The REEF unit tests require a number of open files which is greater than the default open file limit on a number of Linux distributions such as Ubuntu 16.04/16.10.  This limit is controlled in the shell by the "ulimit -n" command
 
-The Java side of REEF is built using Apache Maven. To build and run tests, execute:
+The Java side of REEF is built using Apache Maven. All commands given below for building the code, running the tests or performing individual code quality checks can be used in two ways: when executed from the root directory of REEF project, they will build/run tests/checks on all Java projects in order of their dependencies, and when executed from an individual project's directory (for example, `/lang/java/reef-common`), they will build/run tests/checks on that project only.
+
+To build and run tests, execute:
 
     mvn clean install
 
 REEF integration tests can take a while (~30 minutes on a modern multi-core machine), it may be faster to run one of the commands below which skips these tests.
 
-To perform build alone without tests in a multithreaded mode, execute
+To perform build alone without tests in a multithreaded mode, execute:
 
     mvn -TC1 -DskipTests clean install
 
@@ -90,7 +92,7 @@ Continuous Integration
 ------------
 
 We use [Travis CI](https://travis-ci.org/) to run continuous integration for REEF Java code (i.e. build and run tests
-for all pull requests and commits to master branch).
+for all pull requests and commits to master branch). Our current setup runs 2 builds for each commit: Oracle JDK 8 and OpenJDK 7; REEF can run on Oracle JDK 7 but it has been dropped from Travis build images.
 
 It can be convenient to set up Travis for your fork of REEF repository, for example, to reproduce a test failure which
 can't be reproduced locally.

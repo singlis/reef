@@ -28,6 +28,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Represents a job submission from the CS code.
@@ -54,8 +56,10 @@ final class YarnClusterSubmissionFromCS {
   private final String tokenKind;
   private final String tokenService;
   private final String jobSubmissionDirectoryPrefix;
+  private final String fileSystemUrl;
   private final String yarnDriverStdoutFilePath;
   private final String yarnDriverStderrFilePath;
+  private final Map<String, String> environmentVariablesMap = new HashMap<>();
 
   private final AvroYarnAppSubmissionParameters yarnAppSubmissionParameters;
   private final AvroYarnJobSubmissionParameters yarnJobSubmissionParameters;
@@ -83,9 +87,17 @@ final class YarnClusterSubmissionFromCS {
     this.queue = DEFAULT_QUEUE;
     this.tokenKind = yarnClusterJobSubmissionParameters.getSecurityTokenKind().toString();
     this.tokenService = yarnClusterJobSubmissionParameters.getSecurityTokenService().toString();
+    this.fileSystemUrl = yarnJobSubmissionParameters.getFileSystemUrl().toString();
     this.jobSubmissionDirectoryPrefix = yarnJobSubmissionParameters.getJobSubmissionDirectoryPrefix().toString();
     this.yarnDriverStdoutFilePath = yarnClusterJobSubmissionParameters.getDriverStdoutFilePath().toString();
     this.yarnDriverStderrFilePath = yarnClusterJobSubmissionParameters.getDriverStderrFilePath().toString();
+
+    if (yarnClusterJobSubmissionParameters.getEnvironmentVariablesMap() != null) {
+      for (Map.Entry<java.lang.CharSequence, java.lang.CharSequence> pair :
+          yarnClusterJobSubmissionParameters.getEnvironmentVariablesMap().entrySet()) {
+        this.environmentVariablesMap.put(pair.getKey().toString(), pair.getValue().toString());
+      }
+    }
 
     Validate.notEmpty(jobId, "The job id is null or empty");
     Validate.isTrue(driverMemory > 0, "The amount of driver memory given is <= 0.");
@@ -96,6 +108,7 @@ final class YarnClusterSubmissionFromCS {
     Validate.notEmpty(queue, "The queue is null or empty");
     Validate.notEmpty(tokenKind, "Token kind should be either NULL or some custom non empty value");
     Validate.notEmpty(tokenService, "Token service should be either NULL or some custom non empty value");
+    Validate.notEmpty(fileSystemUrl, "File system Url should be either NULL or some custom non empty value");
     Validate.notEmpty(jobSubmissionDirectoryPrefix, "Job submission directory prefix should not be empty");
     Validate.notEmpty(yarnDriverStdoutFilePath, "Driver stdout file path should not be empty");
     Validate.notEmpty(yarnDriverStderrFilePath, "Driver stderr file path should not be empty");
@@ -116,8 +129,18 @@ final class YarnClusterSubmissionFromCS {
         ", queue='" + queue + '\'' +
         ", tokenKind='" + tokenKind + '\'' +
         ", tokenService='" + tokenService + '\'' +
+        ", fileSystemUrl='" + fileSystemUrl + '\'' +
         ", jobSubmissionDirectoryPrefix='" + jobSubmissionDirectoryPrefix + '\'' +
+        envMapString() +
         '}';
+  }
+
+  private String envMapString() {
+    final StringBuilder sb = new StringBuilder();
+    for (final Map.Entry<String, String> entry : environmentVariablesMap.entrySet()) {
+      sb.append(", Key:" + entry.getKey() + ", value:" + entry.getValue());
+    }
+    return sb.toString();
   }
 
   /**
@@ -167,6 +190,20 @@ final class YarnClusterSubmissionFromCS {
    */
   String getTokenService() {
     return tokenService;
+  }
+
+  /**
+   * @return The file system url
+   */
+  String getFileSystemUrl() {
+    return fileSystemUrl;
+  }
+
+  /**
+   * @return The environment map.
+   */
+  Map<String, String> getEnvironmentVariablesMap() {
+    return new HashMap<>(environmentVariablesMap);
   }
 
   /**
