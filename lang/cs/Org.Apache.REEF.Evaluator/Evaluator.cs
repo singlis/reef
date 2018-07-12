@@ -68,31 +68,39 @@ namespace Org.Apache.REEF.Evaluator
         /// <param name="args"></param>
         public static void Main(string[] args)
         {
-            DefaultUnhandledExceptionHandler.Register();
-
-            if (args.Count() != 1)
+            try
             {
-                var e = new InvalidOperationException("Must supply only the evaluator.config file!");
-                Utilities.Diagnostics.Exceptions.Throw(e, logger);
-            }
+                EvaluatorRuntime.OpenPorts();
+                DefaultUnhandledExceptionHandler.Register();
 
-            if (IsDebuggingEnabled())
+                if (args.Count() != 1)
+                {
+                    var e = new InvalidOperationException("Must supply only the evaluator.config file!");
+                    Utilities.Diagnostics.Exceptions.Throw(e, logger);
+                }
+
+                if (IsDebuggingEnabled())
+                {
+                    AttachDebugger();
+                }
+
+                var fullEvaluatorConfiguration = ReadEvaluatorConfiguration(args[0]);
+                var injector = TangFactory.GetTang().NewInjector(fullEvaluatorConfiguration);
+                var serializer = injector.GetInstance<AvroConfigurationSerializer>();
+                var rootEvaluatorConfiguration = 
+                    TangFactory.GetTang().NewConfigurationBuilder(serializer.FromString(injector.GetNamedInstance<EvaluatorConfiguration, string>()))
+                        .BindSetEntry<RuntimeStartHandler, EvaluatorRuntime, IObserver<RuntimeStart>>()
+                        .BindSetEntry<RuntimeStopHandler, EvaluatorRuntime, IObserver<RuntimeStop>>()
+                        .Build();
+                var evaluator = injector.ForkInjector(rootEvaluatorConfiguration).GetInstance<Evaluator>();
+
+                evaluator.Run();
+                logger.Log(Level.Info, "Evaluator is returned from Run()");
+            }
+            finally
             {
-                AttachDebugger();
+                Logger.Flush();
             }
-
-            var fullEvaluatorConfiguration = ReadEvaluatorConfiguration(args[0]);
-            var injector = TangFactory.GetTang().NewInjector(fullEvaluatorConfiguration);
-            var serializer = injector.GetInstance<AvroConfigurationSerializer>();
-            var rootEvaluatorConfiguration = 
-                TangFactory.GetTang().NewConfigurationBuilder(serializer.FromString(injector.GetNamedInstance<EvaluatorConfiguration, string>()))
-                    .BindSetEntry<RuntimeStartHandler, EvaluatorRuntime, IObserver<RuntimeStart>>()
-                    .BindSetEntry<RuntimeStopHandler, EvaluatorRuntime, IObserver<RuntimeStop>>()
-                    .Build();
-            var evaluator = injector.ForkInjector(rootEvaluatorConfiguration).GetInstance<Evaluator>();
-
-            evaluator.Run();
-            logger.Log(Level.Info, "Evaluator is returned from Run()");
         }
 
         /// <summary>
@@ -111,6 +119,7 @@ namespace Org.Apache.REEF.Evaluator
         /// </summary>
         private static void AttachDebugger()
         {
+
             // Wait for the debugger
             while (true)
             {

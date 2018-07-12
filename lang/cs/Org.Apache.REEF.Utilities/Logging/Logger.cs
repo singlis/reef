@@ -135,6 +135,15 @@ namespace Org.Apache.REEF.Utilities.Logging
         }
 
         /// <summary>
+        /// Supports flushing all trace listeners. This is exposed to allow applications
+        /// to force a flush if needed.
+        /// </summary>
+        public static void Flush()
+        {
+            TraceListeners.ForEach(x=>x.Flush());
+        }
+
+        /// <summary>
         /// Determines whether or not the current log level will be logged by the logger.
         /// </summary>
         public bool IsLoggable(Level level)
@@ -240,6 +249,7 @@ namespace Org.Apache.REEF.Utilities.Logging
 
                 _logger.Log(Level.Start, content);
             }
+
 
             /// <summary>
             /// Logs the end of a scope.
