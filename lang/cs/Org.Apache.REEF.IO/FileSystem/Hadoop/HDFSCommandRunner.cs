@@ -182,7 +182,9 @@ namespace Org.Apache.REEF.IO.FileSystem.Hadoop
                     messageBuilder.WriteLine("Err:    " + stdErr);
                 }
                 messageBuilder.WriteLine("----------------------------------------");
-                Logger.Log(Level.Verbose, messageBuilder.ToString());
+                messageBuilder.WriteLine($"Exit code: {result.ExitCode}");
+
+                Logger.Log(Level.Info, messageBuilder.ToString());
             }
         }
 

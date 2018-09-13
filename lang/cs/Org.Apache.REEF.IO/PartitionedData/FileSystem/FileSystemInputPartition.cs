@@ -114,7 +114,7 @@ namespace Org.Apache.REEF.IO.PartitionedData.FileSystem
                     var localFilePath = Path.Combine(localFileFolder, Guid.NewGuid().ToString("N").Substring(0, 8));
                     set.Add(localFilePath);
 
-                    Logger.Log(Level.Verbose, "LocalFilePath {0}: ", localFilePath);
+                    Logger.Log(Level.Info, "LocalFilePath {0}: ", localFilePath);
                     if (File.Exists(localFilePath))
                     {
                         File.Delete(localFilePath);

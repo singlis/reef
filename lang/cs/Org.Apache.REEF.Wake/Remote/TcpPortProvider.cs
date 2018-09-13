@@ -40,7 +40,11 @@ namespace Org.Apache.REEF.Wake.Remote
             _tcpPortRangeStart = tcpPortRangeStart;
             _tcpPortRangeCount = tcpPortRangeCount;
             _tcpPortRangeTryCount = tcpPortRangeTryCount;
-            _tcpPortRangeSeed = tcpPortRangeSeed;
+
+            if (tcpPortRangeSeed == 0)
+            {
+                _tcpPortRangeSeed = DateTime.Now.Millisecond;
+            }
         }
 
         IEnumerator<int> IEnumerable<int>.GetEnumerator()

@@ -144,11 +144,30 @@ namespace Org.Apache.REEF.IO.FileSystem.Hadoop
         public void CopyToLocal(Uri remoteFileUri, string localName)
         {
             _commandRunner.Run("dfs -get " + remoteFileUri.AbsolutePath + " " + localName);
+            /*
+            var result = _commandRunner.Run("dfs -get " + remoteFileUri.AbsolutePath + " " + localName);
+            if (result.ExitCode != 0)
+            {
+                var errorMessage = $"Copying from {remoteFileUri.AbsolutePath} to {localName}, failed. StdErr: " + string.Join("\n", result.StdErr.ToArray());
+                throw new InvalidOperationException(errorMessage);
+            }
+            */
         }
 
         public void CopyFromLocal(string localFileName, Uri remoteFileUri)
         {
-            _commandRunner.Run("dfs -put " + localFileName + " " + remoteFileUri.AbsolutePath);
+            //copy temporary file then move
+            var tempUri = remoteFileUri.AbsolutePath + Guid.NewGuid();
+            if (_commandRunner.Run("dfs -put " + localFileName + " " + tempUri).ExitCode != 0)
+            {
+                throw new InvalidOperationException($"Copy failed, local {localFileName}, remote {remoteFileUri}, temp {tempUri}");
+            }
+
+            if (_commandRunner.Run("dfs -mv " + tempUri + " " + remoteFileUri.AbsolutePath).ExitCode != 0)
+            {
+                _commandRunner.Run("dfs -rm " + tempUri);
+                throw new InvalidOperationException($"Move failed, temp {tempUri}, remote {remoteFileUri}");
+            }
         }
 
         public void CreateDirectory(Uri directoryUri)
@@ -166,7 +185,7 @@ namespace Org.Apache.REEF.IO.FileSystem.Hadoop
             return _commandRunner.Run("dfs -ls " + directoryUri.AbsolutePath)
                 .StdOut.Where(line => !LsFirstLineRegex.IsMatch(line))
                 .Select(line => line.Split())
-                .Select(x => new Uri(x[x.Length - 1]));
+                .Select(x => new Uri(directoryUri, x[x.Length - 1]));
         }
 
         private string GetUriPrefix()
