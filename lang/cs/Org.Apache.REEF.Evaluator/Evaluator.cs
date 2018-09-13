@@ -68,7 +68,10 @@ namespace Org.Apache.REEF.Evaluator
         /// <param name="args"></param>
         public static void Main(string[] args)
         {
-            try
+            EvaluatorRuntime.OpenPorts();
+            DefaultUnhandledExceptionHandler.Register();
+
+            if (args.Count() != 1)
             {
                 EvaluatorRuntime.OpenPorts();
                 DefaultUnhandledExceptionHandler.Register();
@@ -96,10 +99,6 @@ namespace Org.Apache.REEF.Evaluator
 
                 evaluator.Run();
                 logger.Log(Level.Info, "Evaluator is returned from Run()");
-            }
-            finally
-            {
-                Logger.Flush();
             }
         }
 
