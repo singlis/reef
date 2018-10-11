@@ -88,6 +88,12 @@ This file is used to embed JAR files to client dll
   <data name="ClrDriverFullName" xml:space="preserve">
     <value>Org.Apache.REEF.ClrDriver.exe</value>
   </data>
+  <data name="ClrDriverConfig" xml:space="preserve">
+    <value>Org.Apache.REEF.ClrDriver.exe.config</value>
+  </data>
+  <data name="EvaluatorConfig" xml:space="preserve">
+    <value>Org.Apache.REEF.Evaluator.exe.config</value>
+  </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="reef_bridge_client" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>E:\src\reef\lang\cs\bin\x64\Debug\Org.Apache.REEF.Bridge.JAR\reef-bridge-client-0.17.0-SNAPSHOT-shaded.jar;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -96,6 +102,12 @@ This file is used to embed JAR files to client dll
     <value>E:\src\reef\lang\cs\bin\x64\Debug\Org.Apache.REEF.Bridge.JAR\reef-bridge-java-0.17.0-SNAPSHOT-shaded.jar;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="reef_clrdriver" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>E:\src\reef\lang\cs\bin\x64\Debug\Org.Apache.REEF.ClrDriver\Org.Apache.REEF.ClrDriver.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>E:\src\reef\lang\cs\bin\.netcore\x64\Debug\Org.Apache.REEF.Bridge\Org.Apache.REEF.Bridge.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="reef_clrdriver_config" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>E:\src\reef\lang\cs\bin\.netcore\x64\Debug\Org.Apache.REEF.Bridge\Org.Apache.REEF.Bridge.exe.config;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="reef_evaluator_config" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>E:\src\reef\lang\cs\bin\.netcore\x64\Debug\Org.Apache.REEF.Evaluator\Org.Apache.REEF.Evaluator.exe.config;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

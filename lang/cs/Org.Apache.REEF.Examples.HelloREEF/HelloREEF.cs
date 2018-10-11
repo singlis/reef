@@ -122,13 +122,13 @@ namespace Org.Apache.REEF.Examples.HelloREEF
 
                 case AzureBatch:
                     return AzureBatchRuntimeClientConfiguration.ConfigurationModule
-                        .Set(AzureBatchRuntimeClientConfiguration.AzureBatchAccountKey, @"##########################################")
-                        .Set(AzureBatchRuntimeClientConfiguration.AzureBatchAccountName, @"######")
-                        .Set(AzureBatchRuntimeClientConfiguration.AzureBatchAccountUri, @"######################")
-                        .Set(AzureBatchRuntimeClientConfiguration.AzureBatchPoolId, @"######")
-                        .Set(AzureBatchRuntimeClientConfiguration.AzureStorageAccountKey, @"##########################################")
-                        .Set(AzureBatchRuntimeClientConfiguration.AzureStorageAccountName, @"############")
-                        .Set(AzureBatchRuntimeClientConfiguration.AzureStorageContainerName, @"###########")
+                        .Set(AzureBatchRuntimeClientConfiguration.AzureBatchAccountKey, @"zUyBm+pfwbkJmUgXTe9Nw95vRVLKWIp9baR7SdjfuI83CeW3z1UJzds9btO6IHqnRuL6xh1fOsjTp6YhAK5afg==")
+                        .Set(AzureBatchRuntimeClientConfiguration.AzureBatchAccountName, @"singlisazb")
+                        .Set(AzureBatchRuntimeClientConfiguration.AzureBatchAccountUri, @"https://singlisazb.centralus.batch.azure.com")
+                        .Set(AzureBatchRuntimeClientConfiguration.AzureBatchPoolId, @"singlisaz6")
+                        .Set(AzureBatchRuntimeClientConfiguration.AzureStorageAccountKey, @"shPss/fn8ibMl1ODdImcS7XTh2gn8m2TWoAQrgWMJoJy24/XJjWxuS9o5bBgNrGD4GPoqrvadqKNAl/NYQFOfQ==")
+                        .Set(AzureBatchRuntimeClientConfiguration.AzureStorageAccountName, @"singlisazs")
+                        .Set(AzureBatchRuntimeClientConfiguration.AzureStorageContainerName, @"test-run")
                         //// Extend default retry interval in Azure Batch
                         .Set(AzureBatchRuntimeClientConfiguration.DriverHTTPConnectionRetryInterval, "20000")
                         //// Following list of ports is required to enable the following options:
@@ -154,7 +154,9 @@ namespace Org.Apache.REEF.Examples.HelloREEF
 
         public static void MainSimple(string[] args)
         {
-            var runtime = args.Length > 0 ? args[0] : Local;
+            //var runtime = args.Length > 0 ? args[0] : Local;
+            var runtime = AzureBatch;
+                //args.Length > 0 ? args[0] : Local;
 
             // Execute the HelloREEF, with these parameters injected
             TangFactory.GetTang()

@@ -26,8 +26,16 @@ under the License.
     <!-- Added for when the .net core build is enabled. This prevents assemblies for the bridge
          to be copied to the bin folder. -->
     <ImplicitlyExpandNETStandardFacades>false</ImplicitlyExpandNETStandardFacades>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
   </PropertyGroup>
   <Import Project="..\build.Common.props" />
+  <ItemGroup>
+    <None Include="$(SolutionDir)App.config">
+      <Link>$(TargetName).exe.config</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
       <Configuration>Debug</Configuration>

@@ -95,6 +95,7 @@ under the License.
       var resxInputPath  = Path.Combine(ProjectFolder, srcDir, "Resources.xml");      
       var resourceDir = Path.Combine(ProjectFolder, binDir, DebugOrRelease, "Org.Apache.REEF.Bridge.JAR", "net461");
       var clrDriverDir = Path.Combine(ProjectFolder, binDir, DebugOrRelease, "Org.Apache.REEF.Bridge");
+      var evaluatorDir = Path.Combine(ProjectFolder, binDir, DebugOrRelease, "Org.Apache.REEF.Evaluator", "net461");
       var byteArrayType = ";System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089";
       var jarRest = reefVersion + "-shaded.jar" + byteArrayType;
 
@@ -102,7 +103,9 @@ under the License.
       dllResources.Add("reef_bridge_client", resourceDir + @"\reef-bridge-client-" + jarRest);
       dllResources.Add("reef_bridge_driver", resourceDir + @"\reef-bridge-java-" + jarRest);
       dllResources.Add("evaluator", resourceDir + "Org.Apache.REEF.Evaluator.exe" + byteArrayType);
+      dllResources.Add("reef_evaluator_config", evaluatorDir + @"\Org.Apache.REEF.Evaluator.exe.config" + byteArrayType);
       dllResources.Add("reef_clrdriver", clrDriverDir + @"\Org.Apache.REEF.Bridge.exe" + byteArrayType);
+      dllResources.Add("reef_clrdriver_config", clrDriverDir + @"\Org.Apache.REEF.Bridge.exe.config" + byteArrayType);
       dllResources.Add("ClientJarFullName", "reef-bridge-client-" + reefVersion + "-shaded.jar");
       dllResources.Add("DriverJarFullName", "reef-bridge-java-" + reefVersion + "-shaded.jar");
       dllResources.Add("ClrDriverFullName", "Org.Apache.REEF.Bridge.exe");
@@ -153,8 +156,10 @@ under the License.
     </ItemGroup>
     <Copy SourceFiles="@(MySourceFiles)" DestinationFiles="@(MySourceFiles->'$(TargetDir)%(Filename)%(Extension)')" />
   </Target>
+  <!--
   <Target Name="RemovingTempResx" AfterTargets="AfterBuild">
     <Message Text="Removing temporary resx file" Importance="high"/>
     <Delete Files="$(TempResxFile)" />
   </Target>
+  -->
 </Project>

@@ -34,22 +34,7 @@ namespace Org.Apache.REEF.Client.Common
     /// </summary>
     internal sealed class DriverFolderPreparationHelper
     {
-        private const string DLLFileNameExtension = ".dll";
-        private const string EXEFileNameExtension = ".exe";
-        private const string DefaultDriverConfigurationFileContents =
-        @"<configuration>" +
-        @"  <runtime>" +
-        @"    <assemblyBinding xmlns=""urn:schemas-microsoft-com:asm.v1"">" +
-        @"      <dependentAssembly>" +
-        @"        <assemblyIdentity name=""Newtonsoft.Json"" publicKeyToken=""30ad4fe6b2a6aeed"" culture=""neutral"" />" +
-        @"        <bindingRedirect oldVersion=""0.0.0.0-10.0.0.0"" newVersion=""10.0.0.0"" />" +
-        @"      </dependentAssembly>" +
-        @"      <probing privatePath=""local;global""/>" +
-        @"    </assemblyBinding>" +
-        @"  </runtime>" +
-        @"</configuration>";
-        private const string EvaluatorExecutableConfig = "Org.Apache.REEF.Evaluator.exe.config";
-
+        private readonly string EvaluatorExecutableConfig = "Org.Apache.REEF.Evaluator.exe.config";
         private static readonly Logger Logger = Logger.GetLogger(typeof(DriverFolderPreparationHelper));
         private readonly AvroConfigurationSerializer _configurationSerializer;
         private readonly REEFFileNames _fileNames;
@@ -128,31 +113,35 @@ namespace Org.Apache.REEF.Client.Common
                 {
                     fileName = Path.Combine(driverFolderPath, _fileNames.GetBridgeExePath());
                 }
+                else if (ResourceHelper.ClrDriverConfig == fileResources.Key)
+                {
+                    if (!string.IsNullOrEmpty(appParameters.DriverConfigurationFileContents))
+                    {
+                        File.WriteAllText(Path.Combine(driverFolderPath, _fileNames.GetBridgeExeConfigPath()),
+                                            appParameters.DriverConfigurationFileContents);
+                        continue;
+                    }
+
+                    fileName = Path.Combine(driverFolderPath, _fileNames.GetBridgeExeConfigPath());
+                }
+                else if (ResourceHelper.EvaluatorConfig == fileResources.Key)
+                {
+                    var userDefinedEvaluatorConfigFileName = Path.Combine(JarFolder, EvaluatorExecutableConfig);
+                    if (File.Exists(userDefinedEvaluatorConfigFileName))
+                    {
+                        // Nothing to extract as the user has provided a config
+                        continue;
+                    }
+
+                    fileName = Path.Combine(driverFolderPath, _fileNames.GetGlobalFolderPath(), EvaluatorExecutableConfig);
+                }
+
+
                 if (!File.Exists(fileName))
                 {
                     File.WriteAllBytes(fileName, resourceHelper.GetBytes(fileResources.Value));
                 }
             }
-
-            // generate .config file for bridge executable
-            var config = DefaultDriverConfigurationFileContents;
-            if (!string.IsNullOrEmpty(appParameters.DriverConfigurationFileContents))
-            {
-                config = appParameters.DriverConfigurationFileContents;
-            }
-            File.WriteAllText(Path.Combine(driverFolderPath, _fileNames.GetBridgeExeConfigPath()), config);
-
-            // generate .config file for Evaluator executable
-            var userDefinedEvaluatorConfigFileName = Path.Combine(JarFolder, EvaluatorExecutableConfig);
-            var evaluatorConfigFilName = Path.Combine(driverFolderPath, _fileNames.GetGlobalFolderPath(), EvaluatorExecutableConfig);
-            string evaluatorAppConfigString = DefaultDriverConfigurationFileContents;
-
-            if (File.Exists(userDefinedEvaluatorConfigFileName))
-            {
-                evaluatorAppConfigString = File.ReadAllText(userDefinedEvaluatorConfigFileName);
-            }
-            Logger.Log(Level.Verbose, "Create EvaluatorConfigFile {0} with config {1}.", evaluatorConfigFilName, evaluatorAppConfigString);
-            File.WriteAllText(evaluatorConfigFilName, evaluatorAppConfigString);
         }
 
         private void InternalPrepareDriverFolder(AppParameters appParameters, string driverFolderPath)
